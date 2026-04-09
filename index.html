@@ -21,7 +21,7 @@ body{
   overflow:hidden;
   background: radial-gradient(circle at top,#1a1a2e,#0f0f1a);
   color:white;
-  padding:20px;
+  padding:20%;
 }
 
 /* partículas */
@@ -34,9 +34,11 @@ canvas{
 
 /* telas */
 .screen{
-  position:absolute;
-  width:100%;
-  height:100%;
+ position:absolute;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
@@ -55,6 +57,7 @@ canvas{
   border-radius:25px;
   text-align:center;
   box-shadow:0 0 40px rgba(255,255,255,0.1);
+  margin:20px;
 }
 
 /* título */
@@ -200,7 +203,7 @@ document.body.addEventListener("click", ()=>{
 
 /* idade */
 let idade = new Date().getFullYear() - 2009;
-document.getElementById("idade").innerText = idade + " anos de caos";
+document.getElementById("idade").innerText = idade + " anos de vida";
 
 /* digitar texto */
 function digitarTexto(texto, elemento){
@@ -230,7 +233,7 @@ function trocarTela(sair,entrar){
 function final(){
   let msg = document.getElementById("msg");
 
-  msg.innerHTML = "isso aqui é só pra te lembrar...\n\nque tu é importante pra caralho.";
+  msg.innerHTML = "processando...";
 
   let fade = setInterval(()=>{
     if(musica.volume > 0.1){
@@ -286,4 +289,3 @@ animate();
 
 </body>
 </html>
-```
