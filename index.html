@@ -3,6 +3,9 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Feliz Aniversário 🎂</title>
 
 <style>
@@ -18,6 +21,7 @@ body{
   overflow:hidden;
   background: radial-gradient(circle at top,#1a1a2e,#0f0f1a);
   color:white;
+  padding:20px;
 }
 
 /* partículas */
@@ -40,15 +44,16 @@ canvas{
   transition:1s;
 }
 
-/* card glass */
+/* card bonito */
 .card{
+  width:90%;
+  max-width:500px;
   background: rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.2);
   backdrop-filter: blur(20px);
-  padding:40px;
+  padding:30px;
   border-radius:25px;
   text-align:center;
-  max-width:420px;
   box-shadow:0 0 40px rgba(255,255,255,0.1);
 }
 
@@ -77,6 +82,10 @@ h1{
   margin-bottom:10px;
 }
 
+p{
+  margin-top:15px;
+}
+
 /* botão */
 .btn{
   margin-top:20px;
@@ -96,16 +105,38 @@ h1{
   box-shadow:0 0 25px rgba(255,77,109,1);
 }
 
-/* esconder */
+/* esconder telas */
 #main{opacity:0;pointer-events:none;}
 #videoScreen{opacity:0;pointer-events:none;}
 
 /* vídeo */
 video{
-  width:80%;
+  width:100%;
   max-width:800px;
   border-radius:20px;
   box-shadow:0 0 40px rgba(0,0,0,0.8);
+}
+
+/* RESPONSIVO */
+@media (max-width:600px){
+
+  h1{
+    font-size:2em;
+  }
+
+  .nome{
+    font-size:1.5em;
+  }
+
+  p{
+    font-size:1.1em;
+  }
+
+  .btn{
+    font-size:1em;
+    padding:12px 20px;
+  }
+
 }
 </style>
 </head>
@@ -114,7 +145,8 @@ video{
 
 <canvas id="bg"></canvas>
 
-<audio id="bgMusic" >
+<!-- AUDIO (XUXA SUPREMACY) -->
+<audio id="bgMusic" loop>
   <source src="parabens-da-xuxa_hsKzvzV.mp3" type="audio/mp3">
 </audio>
 
@@ -122,7 +154,7 @@ video{
 <div id="start" class="screen">
   <div class="card">
     <h1>🎁 Ei…</h1>
-    <p>isso aqui é importante</p>
+    <p>isso aqui é importante </p>
     <button class="btn" onclick="abrir()">abrir</button>
   </div>
 </div>
@@ -158,7 +190,7 @@ function abrir(){
   musica.play().catch(()=>{});
 
   let msg = document.getElementById("msg");
-  digitarTexto("17 anos já...\ntu tá ficando velho. \n\nMas sério...\n lembre-se que você importa 💖", msg);
+  digitarTexto("17 anos já...\ntu tá ficando velho\n\nmas sério...\nlembre-se que você é importante 💖", msg);
 }
 
 /* fallback áudio */
@@ -168,7 +200,7 @@ document.body.addEventListener("click", ()=>{
 
 /* idade */
 let idade = new Date().getFullYear() - 2009;
-document.getElementById("idade").innerText = idade + " anos de vida";
+document.getElementById("idade").innerText = idade + " anos de caos";
 
 /* digitar texto */
 function digitarTexto(texto, elemento){
@@ -198,7 +230,7 @@ function trocarTela(sair,entrar){
 function final(){
   let msg = document.getElementById("msg");
 
-  msg.innerHTML = "processando...";
+  msg.innerHTML = "isso aqui é só pra te lembrar...\n\nque tu é importante pra caralho.";
 
   let fade = setInterval(()=>{
     if(musica.volume > 0.1){
@@ -254,4 +286,4 @@ animate();
 
 </body>
 </html>
-
+```
