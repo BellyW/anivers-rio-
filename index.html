@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 
 <title>Feliz Aniversário 🎂</title>
 
@@ -15,19 +15,18 @@
 }
 
 body{
-  min-height:100vh;
-  overflow-x:hidden;
+  height:100vh;
+  overflow:hidden;
   background: radial-gradient(circle at top,#1a1a2e,#0f0f1a);
   color:white;
 }
 
-/* canvas não bloqueia toque */
+/* partículas */
 canvas{
   position:fixed;
   top:0;
   left:0;
   z-index:0;
-  pointer-events:none;
 }
 
 /* telas */
@@ -41,127 +40,227 @@ canvas{
   justify-content:center;
   align-items:center;
   flex-direction:column;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.8s ease;
   z-index: 10;
+  pointer-events: none;
 }
 
-#start { opacity:1; z-index:20; }
-#main { opacity:0; }
+#start {
+  opacity: 1;
+  pointer-events: all;
+  z-index: 20;
+}
+
+#main {
+  opacity: 0;
+  pointer-events: none;
+}
 
 /* card */
 .card{
-  width:92%;
+  width:90%;
   max-width:480px;
-  max-height:90vh;
-  overflow-y:auto;
+  max-height: 90vh;
+  overflow-y: auto;
   background: rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.2);
-  backdrop-filter: blur(15px);
-  padding:20px;
-  border-radius:25px;
+  backdrop-filter: blur(20px);
+  padding:25px 20px;
+  border-radius:30px;
   text-align:center;
+  box-shadow:0 0 40px rgba(255,255,255,0.1);
+  pointer-events: all;
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}
+.card::-webkit-scrollbar {
+  display: none; 
 }
 
-/* foto */
+/* foto destaque */
 .top-photo{
   width:100%;
-  height:150px;
-  border-radius:12px;
-  object-fit:cover;
-  margin-bottom:10px;
-}
-
-/* slider */
-.slider{
-  display:flex;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch;
-  gap:8px;
-  border-radius:12px;
-  margin:15px 0;
-  touch-action: pan-x;
-}
-
-.slide-item{
-  flex:0 0 85%;
-  scroll-snap-align:center;
-  border-radius:12px;
-  overflow:hidden;
-}
-
-.slide-item img{
-  width:100%;
   height:160px;
+  border-radius:15px;
   object-fit:cover;
+  margin-bottom:15px;
+  background: #333;
+  border: 2px solid rgba(255,255,255,0.2);
 }
 
-/* bolinhas */
-.indicadores{
-  display:flex;
-  justify-content:center;
-  gap:6px;
+
+.carrossel-container {
+  position: relative;
+  width: 100%;
+  margin: 15px 0;
+  touch-action: pan-y pinch-zoom;
 }
 
-.bolinha{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#ffffff50;
+.slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 15px;
+  gap: 12px;
+  padding-bottom: 10px;
+  cursor: grab;
+  touch-action: pan-y pinch-zoom;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.bolinha.ativa{
-  background:#ff4d6d;
-  width:18px;
-  border-radius:10px;
+.slider:active {
+  cursor: grabbing;
 }
 
-/* texto */
+.slider::-webkit-scrollbar {
+  display: none;
+}
+
+.slide-item {
+  flex: 0 0 80%;
+  scroll-snap-align: center;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  border: 2px solid rgba(255,255,255,0.2);
+  pointer-events: none;
+}
+
+.slide-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+/* Indicadores (bolinhas) */
+.indicadores {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.bolinha {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transition: 0.3s;
+  cursor: pointer;
+}
+.bolinha.ativa {
+  background: #ff4d6d;
+  width: 20px;
+  border-radius: 10px;
+}
+
+
+/* título */
 h1{
-  font-size:1.5em;
-  margin-bottom:5px;
+  font-size:1.8em;
+  background: linear-gradient(45deg,#ff4d6d,#ff9a9e);
+  -webkit-background-clip:text;
+  color:transparent;
+  margin-bottom: 5px;
 }
 
+/* nome */
 .nome{
-  font-size:1.5em;
-  font-weight:bold;
+  font-size:1.8em;
+  font-weight: bold;
+  margin:8px 0;
+  animation: brilho 2s infinite alternate;
 }
 
-#msg{
-  margin:10px 0;
-  min-height:70px;
-  white-space:pre-line;
+@keyframes brilho{
+  from{ text-shadow:0 0 10px #ff4d6d; }
+  to{ text-shadow:0 0 25px #ff4d6d, 0 0 5px #fff; }
 }
+
+.idade{
+  opacity:0.8;
+  margin-bottom: 5px;
+}
+
+/* texto digitado */
+#msg{
+  margin: 15px 0 10px;
+  line-height: 1.5;
+  min-height: 80px;
+  white-space: pre-line;
+  font-size: 0.95em;
+}
+
+/* caixa de mensagem */
+.box{
+  background: rgba(255,255,255,0.05);
+  border-radius:15px;
+  padding:15px;
+  margin: 15px 0;
+  font-size:0.95em;
+  border-left: 3px solid #ff4d6d;
+  text-align: left;
+}
+
+/* spotify */
+.spotify{
+  display:inline-block;
+  margin-top:5px;
+  margin-bottom:10px;
+  padding:10px 20px;
+  border-radius:30px;
+  background:#1DB954;
+  color:white;
+  text-decoration:none;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+.spotify:active { transform: scale(0.95); }
 
 /* botão */
 .btn{
-  margin-top:15px;
-  padding:12px 25px;
+  margin-top:20px;
+  padding:14px 30px;
   border:none;
-  border-radius:30px;
-  background:#ff4d6d;
+  border-radius:40px;
+  background: linear-gradient(45deg,#ff4d6d,#ff758c);
   color:white;
-  font-weight:bold;
-  font-size:1em;
+  font-weight: bold;
+  font-size: 1.1em;
+  cursor:pointer;
+  box-shadow: 0 4px 15px rgba(255,77,109,0.4);
+  transition: transform 0.2s;
 }
+.btn:active { transform: scale(0.95); }
 
-/* botão som */
-.sound-toggle{
-  position:fixed;
-  bottom:15px;
-  right:15px;
-  width:45px;
-  height:45px;
-  border-radius:50%;
-  background:#00000080;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
-  z-index:100;
+/* Botão de som flutuante */
+.sound-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  transition: 0.2s;
 }
+.sound-toggle:active { background: rgba(255,255,255,0.2); }
 </style>
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -170,133 +269,265 @@ h1{
 <canvas id="bg"></canvas>
 
 <audio id="bgMusic" loop>
-  <source src="parabens-da-xuxa_hsKzvzV.mp3">
+  <source src="parabens-da-xuxa_hsKzvzV.mp3" type="audio/mp3">
 </audio>
 
-<div id="soundBtn" class="sound-toggle" style="display:none;">🔊</div>
+<div id="soundBtn" class="sound-toggle" style="display: none;" onclick="toggleSound()">🔊</div>
 
-<!-- START -->
+<!-- TELA INICIAL -->
 <div id="start" class="screen">
   <div class="card">
     <h1>🎁 Ei, Felps</h1>
-    <p style="margin:15px 0;">Preparei algo pra você</p>
-    <button class="btn" id="btnAbrir">✨ ABRIR ✨</button>
+    <p style="margin: 20px 0;">Preparei uma coisinha pra você </p>
+    <button class="btn" onclick="abrir()">✨ ABRIR PRESENTE ✨</button>
+    <p style="margin-top: 30px; opacity: 0.5; font-size: 0.8em;">(aumenta o som carniça)</p>
   </div>
 </div>
 
-<!-- MAIN -->
+<!-- TELA PRINCIPAL -->
 <div id="main" class="screen">
   <div class="card">
 
-    <img src="felps (1).jpg" class="top-photo">
+    <!-- FOTO PRINCIPAL -->
+    <img src="felps (1).jpg" class="top-photo" alt="Foto destaque">
 
     <h1>🎉 FELIZ ANIVERSÁRIO 🎂</h1>
+
     <div class="nome">FELPS GAY</div>
-    <div id="idade"></div>
+    <div class="idade" id="idade"></div>
 
-    <div class="slider" id="slider">
-      <div class="slide-item"><img src="IMG_20240524_164312.jpg"></div>
-      <div class="slide-item"><img src="IMG_20240523_072654.jpg"></div>
-      <div class="slide-item"><img src="IMG-20240826-WA0005.jpg"></div>
-    </div>
+  
+    <div class="carrossel-container">
+      <div class="slider" id="slider">
+     
+        <div class="slide-item"><img src="IMG_20240524_164312.jpg" alt="Foto 1"></div>
 
-    <div class="indicadores" id="indicadores">
-      <span class="bolinha ativa"></span>
-      <span class="bolinha"></span>
-      <span class="bolinha"></span>
+        <div class="slide-item"><img src="IMG_20240523_072654.jpg" alt="Foto 2"></div>
+  
+        <div class="slide-item"><img src="IMG-20240826-WA0005.jpg" alt="Foto 3"></div>
+        
+        <div class="slide-item"><img src="IMG_20240429_080108.jpg" alt="Foto 4"></div>
+
+        <div class="slide-item"><img src="IMG20251003101635.jpg" alt="Foto 5"></div>
+
+        <div class="slide-item"><img src="IMG20251112104804~2.jpg" alt="Foto 6"></div>
+      </div>
+      
+      <!-- Indicadores (bolinhas) -->
+      <div class="indicadores" id="indicadores">
+        <span class="bolinha ativa" data-index="0"></span>
+        <span class="bolinha" data-index="1"></span>
+        <span class="bolinha" data-index="2"></span>
+        <span class="bolinha" data-index="3"></span>
+        <span class="bolinha" data-index="4"></span>
+        <span class="bolinha" data-index="5"></span>
+      </div>
     </div>
+  
 
     <p id="msg"></p>
+
+    <div class="box">
+       RECADINHO DA PESSOA LINDA MARAVILHOSA PFT QUE TE ENVIOU ISSO:  <br>Eai desgraça, fiz isso aqui porque eu não queria passar o mico de mandar mensagem por mensagem 🙄(e porque eu invejo aquele menino do LEI). Passando aqui pra te desejar um feliz aniversário e agradecer por tudo que você faz por mim, saiba que você é uma pessoa incrível e eu espero que a sua mãe continue me aguentando naquele muquifo😃. Um ano mais perto de ser preso, continue se esforçando como você ta fazendo agora, fiquei feliz de ver seu empenho nas provas, se continuar assim cê fica o mais inteligente do grupo. Eu não vou escrever mais nada de baitolistico aqui não, mas eu separei uma música, uma música que eu escutava a muito tempo atrás e voltei a ouvir ano passado e percebi que ela me lembrava muito você (só ignorar umas partes dela óbvio). É bem antes e depois de Chiquititas mas eu amo ela affs😭 escutava na pandemia. Aperta aí no meu botão (lá ele)
+    </div>
+
+    <a class="spotify" href="https://open.spotify.com/intl-pt/track/65gLJGey4u4KFFqoC5fzFJ?si=f0eeb428fe554ded" target="_blank">
+      🎧 MÚSICA DE BAITOLA 🏳️‍🌈
+    </a>
 
   </div>
 </div>
 
 <script>
+// --- ELEMENTOS ---
 const musica = document.getElementById("bgMusic");
-const btnAbrir = document.getElementById("btnAbrir");
 const soundBtn = document.getElementById("soundBtn");
 const slider = document.getElementById("slider");
-const bolinhas = document.querySelectorAll(".bolinha");
+let bolinhas = document.querySelectorAll(".bolinha");
 
-/* abrir */
-btnAbrir.addEventListener("pointerdown", () => {
-
-  musica.play().catch(()=>{});
-  soundBtn.style.display = "flex";
+// --- FUNÇÃO ABRIR ---
+function abrir(){
+  musica.play().then(() => {
+    soundBtn.style.display = 'flex';
+    soundBtn.innerText = '🔊';
+  }).catch(e => {
+    soundBtn.style.display = 'flex';
+    soundBtn.innerText = '🔈';
+  });
 
   document.getElementById("start").style.opacity = "0";
+  document.getElementById("start").style.pointerEvents = "none";
+  
   document.getElementById("main").style.opacity = "1";
+  document.getElementById("main").style.pointerEvents = "all";
 
-  document.getElementById("idade").innerText =
-    (new Date().getFullYear() - 2009) + " anos";
+  let idade = new Date().getFullYear() - 2009;
+  document.getElementById("idade").innerText = idade + " anos de puro caos 🏳️‍🌈";
 
-  digitarTexto("feliz aniversário viado 🎉", document.getElementById("msg"));
-});
-
-/* som */
-soundBtn.addEventListener("pointerdown", () => {
-  if(musica.paused){
-    musica.play();
-    soundBtn.innerText="🔊";
-  }else{
-    musica.pause();
-    soundBtn.innerText="🔈";
-  }
-});
-
-/* texto */
-function digitarTexto(texto, el){
-  let i=0;
-  let loop=setInterval(()=>{
-    el.innerHTML+=texto[i];
-    i++;
-    if(i>=texto.length) clearInterval(loop);
-  },30);
+  let msg = document.getElementById("msg");
+  digitarTexto("17 anos de pura testosterona\n uma boca grande\ne um coração maior ainda\n(feliz aniversário, viado)", msg);
 }
 
-/* bolinhas */
-slider.addEventListener("scroll", () => {
-  let index = Math.round(slider.scrollLeft / slider.offsetWidth);
+// --- CONTROLE DE SOM ---
+function toggleSound() {
+  if (musica.paused) {
+    musica.play();
+    soundBtn.innerText = '🔊';
+  } else {
+    musica.pause();
+    soundBtn.innerText = '🔈';
+  }
+}
 
-  bolinhas.forEach((b,i)=>{
-    b.classList.toggle("ativa", i===index);
+// --- EFEITO MÁQUINA DE ESCREVER ---
+function digitarTexto(texto, elemento){
+  let i = 0;
+  elemento.innerHTML = "";
+  let intervalo = setInterval(() => {
+    elemento.innerHTML += texto.charAt(i);
+    i++;
+    if(i >= texto.length) clearInterval(intervalo);
+  }, 40);
+}
+
+// --- ATUALIZAR BOLINHAS CONFORME O SCROLL (CORRIGIDO PARA TOUCH) ---
+function atualizarIndicadores() {
+  const slides = document.querySelectorAll('.slide-item');
+  const scrollLeft = slider.scrollLeft;
+  const clientWidth = slider.clientWidth;
+  
+  let melhorIndex = 0;
+  let menorDiferenca = Infinity;
+  
+  slides.forEach((slide, idx) => {
+    const slideLeft = slide.offsetLeft;
+    const slideCenter = slideLeft + (slide.offsetWidth / 2);
+    const viewportCenter = scrollLeft + (clientWidth / 2);
+    const diferenca = Math.abs(slideCenter - viewportCenter);
+    
+    if (diferenca < menorDiferenca) {
+      menorDiferenca = diferenca;
+      melhorIndex = idx;
+    }
   });
+  
+  bolinhas.forEach((bolinha, i) => {
+    if (i === melhorIndex) {
+      bolinha.classList.add('ativa');
+    } else {
+      bolinha.classList.remove('ativa');
+    }
+  });
+}
+
+// --- CLICAR NAS BOLINHAS ROLA PARA A FOTO ---
+function adicionarEventosBolinhas() {
+  bolinhas = document.querySelectorAll(".bolinha");
+  const slides = document.querySelectorAll('.slide-item');
+  
+  bolinhas.forEach((bolinha, index) => {
+    bolinha.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (slides[index]) {
+        slides[index].scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center'
+        });
+        
+        // Atualiza as bolinhas depois de um tempo
+        setTimeout(() => {
+          atualizarIndicadores();
+        }, 300);
+      }
+    });
+  });
+}
+
+// Evento de scroll para atualizar bolinhas
+slider.addEventListener('scroll', () => {
+  atualizarIndicadores();
 });
 
-/* partículas leves */
+// Evento de touch para garantir atualização
+slider.addEventListener('touchend', () => {
+  setTimeout(atualizarIndicadores, 50);
+});
+
+// Evento de mouse
+slider.addEventListener('mouseup', () => {
+  setTimeout(atualizarIndicadores, 50);
+});
+
+// Garantir que a largura seja recalculada se a tela girar
+window.addEventListener('resize', () => {
+  setTimeout(atualizarIndicadores, 100);
+});
+
+// --- PARTÍCULAS DE FUNDO ---
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
-
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 let particles = [];
-
-for(let i=0;i<40;i++){
+for(let i = 0; i < 70; i++){
   particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    dx:(Math.random()-0.5)*0.5,
-    dy:(Math.random()-0.5)*0.5
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 3 + 1,
+    dx: (Math.random() - 0.5) * 0.5,
+    dy: (Math.random() - 0.5) * 0.5
   });
 }
 
-function animar(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  particles.forEach(p=>{
+function animate(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+  
+  particles.forEach(p => {
     ctx.beginPath();
-    ctx.arc(p.x,p.y,2,0,Math.PI*2);
-    ctx.fillStyle="white";
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
     ctx.fill();
-
-    p.x+=p.dx;
-    p.y+=p.dy;
+    
+    p.x += p.dx;
+    p.y += p.dy;
+    
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
   });
-
-  requestAnimationFrame(animar);
+  
+  requestAnimationFrame(animate);
 }
-animar();
+animate();
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+// Forçar som no primeiro toque
+window.onload = () => {
+  document.body.addEventListener('click', function initSound() {
+    musica.play().then(() => {
+      soundBtn.style.display = 'flex';
+      soundBtn.innerText = '🔊';
+    }).catch(()=>{});
+    document.body.removeEventListener('click', initSound);
+  }, { once: true });
+  
+  // Inicializa indicadores e eventos
+  setTimeout(() => {
+    atualizarIndicadores();
+    adicionarEventosBolinhas();
+  }, 100);
+};
+
+// Reaplicar eventos se o conteúdo mudar
+const observer = new MutationObserver(() => {
+  adicionarEventosBolinhas();
+});
+observer.observe(document.getElementById('main'), { childList: true, subtree: true });
 </script>
 
 </body>
