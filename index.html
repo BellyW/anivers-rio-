@@ -1,3 +1,4 @@
+```html id="site-final-ultimate">
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -50,15 +51,47 @@ canvas{
   background: rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.2);
   backdrop-filter: blur(20px);
-  padding:30px;
+  padding:25px;
   border-radius:25px;
   text-align:center;
   box-shadow:0 0 40px rgba(255,255,255,0.1);
 }
 
+/* foto destaque */
+.top-photo{
+  width:100%;
+  height:180px;
+  border-radius:15px;
+  object-fit:cover;
+  margin-bottom:10px;
+}
+
+/* slideshow */
+.slider{
+  position:relative;
+  width:100%;
+  height:150px;
+  overflow:hidden;
+  border-radius:15px;
+  margin-top:10px;
+}
+
+.slider img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  position:absolute;
+  opacity:0;
+  transition:0.5s;
+}
+
+.slider img.active{
+  opacity:1;
+}
+
 /* título */
 h1{
-  font-size:2.3em;
+  font-size:2em;
   background: linear-gradient(45deg,#ff4d6d,#ff9a9e);
   -webkit-background-clip:text;
   color:transparent;
@@ -66,8 +99,8 @@ h1{
 
 /* nome */
 .nome{
-  font-size:1.6em;
-  margin:10px 0;
+  font-size:1.4em;
+  margin:8px 0;
   animation: brilho 2s infinite alternate;
 }
 
@@ -78,39 +111,32 @@ h1{
 
 .idade{
   opacity:0.7;
-  margin-bottom:10px;
 }
 
-/* texto digitando */
+/* texto */
 #msg{
-  margin-top:15px;
+  margin-top:10px;
 }
 
-/* caixa personalizada */
+/* caixa */
 .box{
   background: rgba(255,255,255,0.05);
   border-radius:15px;
-  padding:15px;
-  margin-top:15px;
-  font-size:0.95em;
-  line-height:1.4;
+  padding:12px;
+  margin-top:10px;
+  font-size:0.9em;
 }
 
 /* spotify */
 .spotify{
   display:inline-block;
-  margin-top:15px;
-  padding:10px 20px;
+  margin-top:10px;
+  padding:8px 18px;
   border-radius:20px;
   background:#1DB954;
   color:white;
   text-decoration:none;
-  font-size:0.9em;
-  transition:0.3s;
-}
-
-.spotify:hover{
-  transform:scale(1.1);
+  font-size:0.85em;
 }
 
 /* botão */
@@ -122,12 +148,9 @@ h1{
   background: linear-gradient(45deg,#ff4d6d,#ff758c);
   color:white;
   cursor:pointer;
-  font-size:1em;
 }
 
-/* esconder tela principal */
 #main{opacity:0;pointer-events:none;}
-
 </style>
 </head>
 
@@ -142,7 +165,7 @@ h1{
 <!-- tela inicial -->
 <div id="start" class="screen">
   <div class="card">
-    <h1>🎁 Ei porra</h1>
+    <h1>🎁 Ei…</h1>
     <p>abre isso aqui 👀</p>
     <button class="btn" onclick="abrir()">abrir</button>
   </div>
@@ -152,20 +175,29 @@ h1{
 <div id="main" class="screen">
   <div class="card">
 
+    <!-- FOTO PRINCIPAL -->
+    <img src="foto1.jpg" class="top-photo">
+
     <h1>🎉 Feliz Aniversário 🎂</h1>
 
     <div class="nome">FELPS GAY</div>
     <div class="idade" id="idade"></div>
 
+    <!-- SLIDESHOW -->
+    <div class="slider" id="slider">
+      <img src="foto1.jpg" class="active">
+      <img src="foto2.jpg">
+      <img src="foto3.jpg">
+    </div>
+
     <p id="msg"></p>
 
     <div class="box">
-      escreve aqui teu textinho 💖<br><br>
-      tipo mensagem fofa ou zoeira KKKK
+      escreve aqui tua mensagem 💖
     </div>
 
     <a class="spotify" href="LINK_AQUI" target="_blank">
-      🎧 ouvir música especial
+      🎧 música especial
     </a>
 
   </div>
@@ -179,10 +211,9 @@ function abrir(){
   musica.play().catch(()=>{});
 
   let msg = document.getElementById("msg");
-  digitarTexto("17 anos já...\ntu tá ficando velho KKKKK\n\nmas sério...\ntu é importante pra caralho 💖", msg);
+  digitarTexto("17 anos já...\ntu tá ficando velho KKKKK\n\nmas sério...\ntu é importante 💖", msg);
 }
 
-/* fallback áudio */
 document.body.addEventListener("click", ()=>{
   musica.play().catch(()=>{});
 }, { once:true });
@@ -190,7 +221,7 @@ document.body.addEventListener("click", ()=>{
 let idade = new Date().getFullYear() - 2009;
 document.getElementById("idade").innerText = idade + " anos de caos";
 
-/* digitar texto */
+/* digitar */
 function digitarTexto(texto, elemento){
   let i=0;
   elemento.innerHTML="";
@@ -214,6 +245,39 @@ function trocarTela(sair,entrar){
   },800);
 }
 
+/* slideshow automático */
+let index=0;
+let imgs=document.querySelectorAll(".slider img");
+
+setInterval(()=>{
+  imgs[index].classList.remove("active");
+  index=(index+1)%imgs.length;
+  imgs[index].classList.add("active");
+},2500);
+
+/* swipe */
+let startX=0;
+
+document.getElementById("slider").addEventListener("touchstart",(e)=>{
+  startX=e.touches[0].clientX;
+});
+
+document.getElementById("slider").addEventListener("touchend",(e)=>{
+  let endX=e.changedTouches[0].clientX;
+
+  if(startX > endX + 50){
+    mudarSlide(1);
+  }else if(startX < endX - 50){
+    mudarSlide(-1);
+  }
+});
+
+function mudarSlide(dir){
+  imgs[index].classList.remove("active");
+  index=(index+dir+imgs.length)%imgs.length;
+  imgs[index].classList.add("active");
+}
+
 /* partículas */
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
@@ -221,7 +285,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particles=[];
-for(let i=0;i<80;i++){
+for(let i=0;i<60;i++){
   particles.push({
     x:Math.random()*canvas.width,
     y:Math.random()*canvas.height,
@@ -254,3 +318,4 @@ animate();
 
 </body>
 </html>
+```
