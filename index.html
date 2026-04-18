@@ -42,7 +42,7 @@ canvas{
   flex-direction:column;
   transition: opacity 0.8s ease;
   z-index: 10;
-  pointer-events: none; /* Padrão para não bloquear cliques na tela de trás */
+  pointer-events: none;
 }
 
 #start {
@@ -59,49 +59,97 @@ canvas{
 /* card */
 .card{
   width:90%;
-  max-width:500px;
+  max-width:480px;
+  max-height: 90vh;
+  overflow-y: auto;
   background: rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.2);
   backdrop-filter: blur(20px);
-  padding:25px;
-  border-radius:25px;
+  padding:25px 20px;
+  border-radius:30px;
   text-align:center;
   box-shadow:0 0 40px rgba(255,255,255,0.1);
-  pointer-events: all; /* Permite interação dentro do card */
+  pointer-events: all;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+.card::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
 }
 
 /* foto destaque */
 .top-photo{
   width:100%;
-  height:180px;
+  height:160px;
   border-radius:15px;
   object-fit:cover;
-  margin-bottom:10px;
-  background: #333; /* fallback */
+  margin-bottom:15px;
+  background: #333;
+  border: 2px solid rgba(255,255,255,0.2);
 }
 
-/* slideshow */
-.slider{
-  position:relative;
-  width:100%;
-  height:150px;
-  overflow:hidden;
-  border-radius:15px;
+/* ========= NOVO CARROSSEL (CORRIGIDO) ========= */
+.carrossel-container {
+  position: relative;
+  width: 100%;
   margin: 15px 0;
 }
 
-.slider img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  position:absolute;
-  opacity:0;
-  transition: opacity 0.5s ease;
+.slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 15px;
+  gap: 8px;
+  padding-bottom: 5px;
+  
+  /* Esconde a barra de rolagem */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.slider::-webkit-scrollbar {
+  display: none;
 }
 
-.slider img.active{
-  opacity:1;
+.slide-item {
+  flex: 0 0 85%; /* Cada foto ocupa 85% da largura do card */
+  scroll-snap-align: center;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  border: 2px solid rgba(255,255,255,0.2);
 }
+
+.slide-item img {
+  width: 100%;
+  height: 180px; /* ALTURA FIXA PARA NÃO ESPREMER */
+  object-fit: cover; /* CORTA A IMAGEM PARA CABER SEM DISTORCER */
+  display: block;
+}
+
+/* Indicadores (bolinhas) */
+.indicadores {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.bolinha {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transition: 0.3s;
+}
+.bolinha.ativa {
+  background: #ff4d6d;
+  width: 20px;
+  border-radius: 10px;
+}
+/* ============================================= */
 
 /* título */
 h1{
@@ -130,15 +178,16 @@ h1{
   margin-bottom: 5px;
 }
 
-/* texto */
+/* texto digitado */
 #msg{
   margin: 15px 0 10px;
   line-height: 1.5;
   min-height: 80px;
   white-space: pre-line;
+  font-size: 0.95em;
 }
 
-/* caixa */
+/* caixa de mensagem */
 .box{
   background: rgba(255,255,255,0.05);
   border-radius:15px;
@@ -151,7 +200,8 @@ h1{
 /* spotify */
 .spotify{
   display:inline-block;
-  margin-top:10px;
+  margin-top:5px;
+  margin-bottom:10px;
   padding:10px 20px;
   border-radius:30px;
   background:#1DB954;
@@ -161,9 +211,7 @@ h1{
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   transition: transform 0.2s;
 }
-.spotify:hover {
-  transform: scale(1.05);
-}
+.spotify:hover { transform: scale(1.05); }
 
 /* botão */
 .btn{
@@ -201,9 +249,7 @@ h1{
   z-index: 100;
   transition: 0.2s;
 }
-.sound-toggle:hover {
-  background: rgba(255,255,255,0.2);
-}
+.sound-toggle:hover { background: rgba(255,255,255,0.2); }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -213,14 +259,12 @@ h1{
 <canvas id="bg"></canvas>
 
 <audio id="bgMusic" loop>
-  <!-- Verifique se o arquivo está na mesma pasta com esse nome exato -->
   <source src="parabens-da-xuxa_hsKzvzV.mp3" type="audio/mp3">
 </audio>
 
-<!-- Botão de controle de som (aparece depois de abrir) -->
 <div id="soundBtn" class="sound-toggle" style="display: none;" onclick="toggleSound()">🔊</div>
 
-<!-- tela inicial -->
+<!-- TELA INICIAL -->
 <div id="start" class="screen">
   <div class="card">
     <h1>🎁 Ei, Felps…</h1>
@@ -230,24 +274,48 @@ h1{
   </div>
 </div>
 
-<!-- tela principal -->
+<!-- TELA PRINCIPAL -->
 <div id="main" class="screen">
   <div class="card">
 
     <!-- FOTO PRINCIPAL -->
-    <img src="foto1.jpg" class="top-photo" alt="Foto destaque">
+    <img src="felps (1).jpg" class="top-photo" alt="Foto destaque">
 
     <h1>🎉 FELIZ ANIVERSÁRIO 🎂</h1>
 
     <div class="nome">FELPS GAY</div>
     <div class="idade" id="idade"></div>
 
-    <!-- SLIDESHOW -->
-    <div class="slider" id="slider">
-      <img src="IMG_20240524_164312.jpg" class="active" alt="Momento 1">
-      <img src="IMG_20240523_072654.jpg" alt="Momento 2">
-      <img src="Screenshot_20240525-215329.jpg" alt="Momento 3">
+    <!-- ========== NOVO CARROSSEL COM 6 FOTOS ========== -->
+    <div class="carrossel-container">
+      <div class="slider" id="slider">
+        <!-- FOTO 1 (já existia) -->
+        <div class="slide-item"><img src="IMG_20240524_164312.jpg" alt="Foto 1"></div>
+        <!-- FOTO 2 (já existia) -->
+        <div class="slide-item"><img src="IMG_20240523_072654.jpg" alt="Foto 2"></div>
+        <!-- FOTO 3 (já existia) -->
+        <div class="slide-item"><img src="Screenshot_20240525-215329.jpg" alt="Foto 3"></div>
+        
+        <!-- ========== 3 NOVAS FOTOS ========== -->
+        <!-- FOTO 4: Renomeie seu arquivo ou mude o src aqui -->
+        <div class="slide-item"><img src="IMG_20240429_080108.jpg" alt="Foto 4"></div>
+        <!-- FOTO 5: Renomeie seu arquivo ou mude o src aqui -->
+        <div class="slide-item"><img src="IMG20251003101635.jpg" alt="Foto 5"></div>
+        <!-- FOTO 6: Renomeie seu arquivo ou mude o src aqui -->
+        <div class="slide-item"><img src="IMG20251112104804~2.jpg" alt="Foto 6"></div>
+      </div>
+      
+      <!-- Indicadores (bolinhas) -->
+      <div class="indicadores" id="indicadores">
+        <span class="bolinha ativa"></span>
+        <span class="bolinha"></span>
+        <span class="bolinha"></span>
+        <span class="bolinha"></span>
+        <span class="bolinha"></span>
+        <span class="bolinha"></span>
+      </div>
     </div>
+    <!-- ============================================= -->
 
     <p id="msg"></p>
 
@@ -256,12 +324,11 @@ h1{
       "Tu é incrível, mesmo sendo um caos. Obrigado por existir e me aturar. Te amo! Nunca mude (só para de ser lerdo kkkk)."
     </div>
 
-    <!-- LINK ATUALIZADO PARA UMA MÚSICA VIRAL DO MOMENTO (Ex: "Sua Cara" ou "Pabllo Vittar") -->
     <a class="spotify" href="https://open.spotify.com/track/1oZkmT6UDBhE53nDcgjMmJ?si=abc123" target="_blank">
       🎧 CLICA AQUI PRA TOCAR O HINO 🏳️‍🌈
     </a>
 
-    <p style="margin-top: 20px; font-size: 0.7em; opacity: 0.6;">Desliza as fotos pro lado →</p>
+    <p style="margin-top: 15px; font-size: 0.7em; opacity: 0.6;">⬅️ Arrasta pro lado pra ver mais fotos ➡️</p>
   </div>
 </div>
 
@@ -269,33 +336,28 @@ h1{
 // --- ELEMENTOS ---
 const musica = document.getElementById("bgMusic");
 const soundBtn = document.getElementById("soundBtn");
-let isMusicPlaying = false;
+const slider = document.getElementById("slider");
+const bolinhas = document.querySelectorAll(".bolinha");
 
-// --- FUNÇÃO ABRIR (CORRIGIDA) ---
+// --- FUNÇÃO ABRIR ---
 function abrir(){
-  // Toca a música assim que o usuário interage (resolve bloqueio de autoplay)
   musica.play().then(() => {
-    isMusicPlaying = true;
     soundBtn.style.display = 'flex';
     soundBtn.innerText = '🔊';
   }).catch(e => {
-    console.log("Autoplay bloqueado, clique no botão de som.");
     soundBtn.style.display = 'flex';
-    soundBtn.innerText = '🔈'; // Mostra mudo
+    soundBtn.innerText = '🔈';
   });
 
-  // Troca a tela
   document.getElementById("start").style.opacity = "0";
   document.getElementById("start").style.pointerEvents = "none";
   
   document.getElementById("main").style.opacity = "1";
   document.getElementById("main").style.pointerEvents = "all";
 
-  // Calcula e exibe a idade
   let idade = new Date().getFullYear() - 2009;
   document.getElementById("idade").innerText = idade + " anos de puro caos 🏳️‍🌈";
 
-  // Inicia a digitação
   let msg = document.getElementById("msg");
   digitarTexto("17 anos já...\ntu tá ficando velho KKKKK\n\nmas sério...\ntu é muito importante pra mim 💖\n(feliz aniversário, viado)", msg);
 }
@@ -318,48 +380,34 @@ function digitarTexto(texto, elemento){
   let intervalo = setInterval(() => {
     elemento.innerHTML += texto.charAt(i);
     i++;
-    if(i >= texto.length){
-      clearInterval(intervalo);
-    }
+    if(i >= texto.length) clearInterval(intervalo);
   }, 40);
 }
 
-// --- SLIDESHOW (COM TOQUE E AUTOMÁTICO) ---
-let index = 0;
-let imgs = document.querySelectorAll(".slider img");
-
-setInterval(() => {
-  if (imgs.length > 0) {
-    imgs[index].classList.remove("active");
-    index = (index + 1) % imgs.length;
-    imgs[index].classList.add("active");
-  }
-}, 3000);
-
-// Swipe para mobile
-let startX = 0;
-const sliderEl = document.getElementById("slider");
-
-sliderEl.addEventListener("touchstart", (e) => {
-  startX = e.touches[0].clientX;
-}, {passive: true});
-
-sliderEl.addEventListener("touchend", (e) => {
-  let endX = e.changedTouches[0].clientX;
-  if (startX > endX + 50) {
-    mudarSlide(1); // Direita -> Esquerda (Próximo)
-  } else if (startX < endX - 50) {
-    mudarSlide(-1); // Esquerda -> Direita (Anterior)
-  }
-});
-
-function mudarSlide(dir) {
-  imgs[index].classList.remove("active");
-  index = (index + dir + imgs.length) % imgs.length;
-  imgs[index].classList.add("active");
+// --- ATUALIZAR BOLINHAS CONFORME O SCROLL ---
+function atualizarIndicadores() {
+  const scrollLeft = slider.scrollLeft;
+  const itemWidth = slider.querySelector('.slide-item').offsetWidth + 8; // 8px é o gap
+  const indexAtual = Math.round(scrollLeft / itemWidth);
+  
+  bolinhas.forEach((bolinha, i) => {
+    if (i === indexAtual) {
+      bolinha.classList.add('ativa');
+    } else {
+      bolinha.classList.remove('ativa');
+    }
+  });
 }
 
-// --- PARTÍCULAS DE FUNDO (CORRIGIDO Z-INDEX) ---
+// Evento de scroll para atualizar bolinhas
+slider.addEventListener('scroll', atualizarIndicadores);
+
+// Garantir que a largura seja recalculada se a tela girar
+window.addEventListener('resize', () => {
+  atualizarIndicadores();
+});
+
+// --- PARTÍCULAS DE FUNDO ---
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
@@ -396,15 +444,13 @@ function animate(){
 }
 animate();
 
-// Ajustar canvas ao redimensionar a janela
 window.addEventListener('resize', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
 
-// Forçar a exibição do botão de som caso o autoplay falhe
+// Forçar som no primeiro toque
 window.onload = () => {
-  // Tenta tocar música no primeiro toque na tela (backup)
   document.body.addEventListener('click', function initSound() {
     musica.play().then(() => {
       soundBtn.style.display = 'flex';
@@ -412,6 +458,9 @@ window.onload = () => {
     }).catch(()=>{});
     document.body.removeEventListener('click', initSound);
   }, { once: true });
+  
+  // Inicializa indicadores
+  atualizarIndicadores();
 };
 </script>
 
