@@ -70,11 +70,11 @@ canvas{
   text-align:center;
   box-shadow:0 0 40px rgba(255,255,255,0.1);
   pointer-events: all;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
 }
 .card::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+  display: none; 
 }
 
 /* foto destaque */
@@ -88,7 +88,7 @@ canvas{
   border: 2px solid rgba(255,255,255,0.2);
 }
 
-/* ========= NOVO CARROSSEL (CORRIGIDO) ========= */
+
 .carrossel-container {
   position: relative;
   width: 100%;
@@ -105,7 +105,7 @@ canvas{
   gap: 8px;
   padding-bottom: 5px;
   
-  /* Esconde a barra de rolagem */
+  
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -114,7 +114,7 @@ canvas{
 }
 
 .slide-item {
-  flex: 0 0 85%; /* Cada foto ocupa 85% da largura do card */
+  flex: 0 0 85%; 
   scroll-snap-align: center;
   border-radius: 15px;
   overflow: hidden;
@@ -124,8 +124,8 @@ canvas{
 
 .slide-item img {
   width: 100%;
-  height: 180px; /* ALTURA FIXA PARA NÃO ESPREMER */
-  object-fit: cover; /* CORTA A IMAGEM PARA CABER SEM DISTORCER */
+  height: 180px; 
+  object-fit: cover; 
   display: block;
 }
 
@@ -149,7 +149,7 @@ canvas{
   width: 20px;
   border-radius: 10px;
 }
-/* ============================================= */
+
 
 /* título */
 h1{
@@ -267,10 +267,10 @@ h1{
 <!-- TELA INICIAL -->
 <div id="start" class="screen">
   <div class="card">
-    <h1>🎁 Ei, Felps…</h1>
-    <p style="margin: 20px 0;">Preparei uma coisinha pra você 👀</p>
+    <h1>🎁 Ei, Felps</h1>
+    <p style="margin: 20px 0;">Preparei uma coisinha pra você </p>
     <button class="btn" onclick="abrir()">✨ ABRIR PRESENTE ✨</button>
-    <p style="margin-top: 30px; opacity: 0.5; font-size: 0.8em;">(aumenta o som, tá?)</p>
+    <p style="margin-top: 30px; opacity: 0.5; font-size: 0.8em;">(aumenta o som carniça)</p>
   </div>
 </div>
 
@@ -286,22 +286,20 @@ h1{
     <div class="nome">FELPS GAY</div>
     <div class="idade" id="idade"></div>
 
-    <!-- ========== NOVO CARROSSEL COM 6 FOTOS ========== -->
+  
     <div class="carrossel-container">
       <div class="slider" id="slider">
-        <!-- FOTO 1 (já existia) -->
+     
         <div class="slide-item"><img src="IMG_20240524_164312.jpg" alt="Foto 1"></div>
-        <!-- FOTO 2 (já existia) -->
+
         <div class="slide-item"><img src="IMG_20240523_072654.jpg" alt="Foto 2"></div>
-        <!-- FOTO 3 (já existia) -->
-        <div class="slide-item"><img src="Screenshot_20240525-215329.png" alt="Foto 3"></div>
+  
+        <div class="slide-item"><img src="IMG-20240826-WA0005.jpg" alt="Foto 3"></div>
         
-        <!-- ========== 3 NOVAS FOTOS ========== -->
-        <!-- FOTO 4: Renomeie seu arquivo ou mude o src aqui -->
         <div class="slide-item"><img src="IMG_20240429_080108.jpg" alt="Foto 4"></div>
-        <!-- FOTO 5: Renomeie seu arquivo ou mude o src aqui -->
+
         <div class="slide-item"><img src="IMG20251003101635.jpg" alt="Foto 5"></div>
-        <!-- FOTO 6: Renomeie seu arquivo ou mude o src aqui -->
+
         <div class="slide-item"><img src="IMG20251112104804~2.jpg" alt="Foto 6"></div>
       </div>
       
@@ -315,17 +313,16 @@ h1{
         <span class="bolinha"></span>
       </div>
     </div>
-    <!-- ============================================= -->
+  
 
     <p id="msg"></p>
 
     <div class="box">
-      💖 RECADINHO DA PESSOA QUE TE ENVIOU ISSO: 💖 <br>
-      "Tu é incrível, mesmo sendo um caos. Obrigado por existir e me aturar. Te amo! Nunca mude (só para de ser lerdo kkkk)."
+      💖 RECADINHO DA PESSOA QUE TE ENVIOU ISSO: 💖 <br>Eai desgraça, fiz isso aqui porque eu não queria passar o mico de mandar mensagem por mensagem 🙄(e porque eu invejo aquele menino do LEI). Passando aqui pra te desejar um feliz aniversário e agradecer por tudo que você faz por mim, saiba que você é uma pessoa incrível e eu espero que a sua mãe continue me aguentando naquele muquifo😃. Um ano mais perto de ser preso, continue se esforçando como você ta fazendo agora, fiquei feliz de ver seu empenho nas provas, se continuar assim cê fica o mais inteligente do grupo. Eu não vou escrever mais nada de baitolistico aqui não, mas eu separei uma música, uma música que eu escutava a muito tempo atrás e voltei a ouvir ano passado e percebi que ela me lembrava muito você (só ignorar umas partes dela óbvio). É bem antes e depois de Chiquititas mas eu amo ela affs😭 escutava na pandemia. Aperta aí no meu botão (lá ele)
     </div>
 
-    <a class="spotify" href="https://open.spotify.com/track/1oZkmT6UDBhE53nDcgjMmJ?si=abc123" target="_blank">
-      🎧 CLICA AQUI PRA TOCAR O HINO 🏳️‍🌈
+    <a class="spotify" href="https://open.spotify.com/intl-pt/track/65gLJGey4u4KFFqoC5fzFJ?si=f0eeb428fe554ded" target="_blank">
+      🎧 MÚSICA DE BAITOLA 🏳️‍🌈
     </a>
 
     <p style="margin-top: 15px; font-size: 0.7em; opacity: 0.6;">⬅️ Arrasta pro lado pra ver mais fotos ➡️</p>
