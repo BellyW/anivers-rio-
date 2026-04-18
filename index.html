@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 
 <title>Feliz Aniversário 🎂</title>
 
@@ -12,6 +12,7 @@
   padding:0;
   box-sizing:border-box;
   font-family:'Poppins',sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body{
@@ -21,17 +22,6 @@ body{
   color:white;
   position: fixed;
   width: 100%;
-}
-
-/* partículas - fixas no fundo */
-canvas{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  z-index:0;
-  pointer-events: none; /* IMPORTANTE: não atrapalha o toque */
 }
 
 /* telas */
@@ -61,10 +51,9 @@ canvas{
 #main {
   opacity: 0;
   pointer-events: none;
-  overflow-y: auto;
 }
 
-/* card - agora com scroll PERFEITO */
+/* card - scroll corrigido */
 .card{
   width:90%;
   max-width:480px;
@@ -78,13 +67,13 @@ canvas{
   border-radius:30px;
   text-align:center;
   box-shadow:0 0 40px rgba(255,255,255,0.1);
-  pointer-events: auto; /* IMPORTANTE: recebe toques */
+  pointer-events: all;
   -webkit-overflow-scrolling: touch;
   position: relative;
   z-index: 15;
 }
 
-/* Scrollbar bonita */
+/* Scroll bonito mas funcional */
 .card::-webkit-scrollbar {
   width: 4px;
 }
@@ -115,21 +104,17 @@ canvas{
   position: relative;
   width: 100%;
   margin: 15px 0;
-  touch-action: pan-y pinch-zoom; /* permite scroll vertical mas não horizontal */
 }
 
 .slider {
   display: flex;
   overflow-x: auto;
-  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   border-radius: 15px;
   gap: 8px;
-  padding: 5px 0 10px 0;
-  scrollbar-width: thin;
-  touch-action: pan-x; /* Só scroll horizontal no carrossel */
+  padding-bottom: 5px;
   cursor: grab;
 }
 
@@ -158,7 +143,6 @@ canvas{
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
   border: 2px solid rgba(255,255,255,0.2);
-  pointer-events: none;
 }
 
 .slide-item img {
@@ -166,31 +150,7 @@ canvas{
   height: 180px; 
   object-fit: cover; 
   display: block;
-}
-
-/* Indicadores */
-.indicadores {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 10px;
-  padding: 5px;
-}
-
-.bolinha {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.3);
-  transition: 0.3s;
-  cursor: pointer;
-  pointer-events: auto;
-}
-
-.bolinha.ativa {
-  background: #ff4d6d;
-  width: 20px;
-  border-radius: 10px;
+  pointer-events: none;
 }
 
 /* título */
@@ -228,7 +188,7 @@ h1{
   min-height: 80px;
   white-space: pre-line;
   font-size: 0.95em;
-  text-align: left;
+  text-align: center;
 }
 
 /* caixa de mensagem */
@@ -240,7 +200,6 @@ h1{
   font-size:0.95em;
   border-left: 3px solid #ff4d6d;
   text-align: left;
-  word-wrap: break-word;
 }
 
 /* spotify */
@@ -256,7 +215,6 @@ h1{
   font-weight: bold;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   transition: transform 0.2s;
-  pointer-events: auto;
 }
 .spotify:active { transform: scale(0.95); }
 
@@ -273,7 +231,6 @@ h1{
   cursor:pointer;
   box-shadow: 0 4px 15px rgba(255,77,109,0.4);
   transition: transform 0.2s;
-  pointer-events: auto;
 }
 .btn:active { transform: scale(0.95); }
 
@@ -296,37 +253,18 @@ h1{
   cursor: pointer;
   z-index: 100;
   transition: 0.2s;
-  pointer-events: auto;
 }
 .sound-toggle:active { background: rgba(255,255,255,0.3); }
 
-/* Ajustes mobile */
-@media (max-width: 600px) {
-  .card {
-    width: 95%;
-    padding: 20px 15px;
-    max-height: 85vh;
-  }
-  
-  .slide-item img {
-    height: 200px;
-  }
-  
-  h1 {
-    font-size: 1.5em;
-  }
-  
-  .nome {
-    font-size: 1.5em;
-  }
+/* Esconder bolinhas do carrossel */
+.indicadores {
+  display: none;
 }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
-
-<canvas id="bg"></canvas>
 
 <audio id="bgMusic" preload="auto">
   <source src="parabens-da-xuxa_hsKzvzV.mp3" type="audio/mp3">
@@ -365,11 +303,9 @@ h1{
         <div class="slide-item"><img src="IMG20251003101635.jpg" alt="Foto 5" loading="lazy"></div>
         <div class="slide-item"><img src="IMG20251112104804~2.jpg" alt="Foto 6" loading="lazy"></div>
       </div>
-      
-      <div class="indicadores" id="indicadores"></div>
     </div>
 
-    <div id="msg"></div>
+    <p id="msg"></p>
 
     <div class="box">
       <strong>📝 RECADINHO DA PESSOA LINDA MARAVILHOSA PFT QUE TE ENVIOU ISSO:</strong><br><br>
@@ -388,102 +324,12 @@ h1{
 const musica = document.getElementById("bgMusic");
 const soundBtn = document.getElementById("soundBtn");
 const slider = document.getElementById("slider");
-const mainScreen = document.getElementById("main");
 let slideInterval;
-
-// Criar indicadores dinamicamente
-function criarIndicadores() {
-  const slides = document.querySelectorAll('.slide-item');
-  const indicadoresDiv = document.getElementById('indicadores');
-  if (!indicadoresDiv) return;
-  
-  indicadoresDiv.innerHTML = '';
-  
-  slides.forEach((_, index) => {
-    const bolinha = document.createElement('span');
-    bolinha.classList.add('bolinha');
-    if (index === 0) bolinha.classList.add('ativa');
-    bolinha.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const itemWidth = slides[0].offsetWidth + 8;
-      slider.scrollTo({ left: index * itemWidth, behavior: 'smooth' });
-    });
-    indicadoresDiv.appendChild(bolinha);
-  });
-}
-
-// Atualizar indicadores
-function atualizarIndicadores() {
-  const slides = document.querySelectorAll('.slide-item');
-  const bolinhas = document.querySelectorAll('.bolinha');
-  if (!slides.length || !bolinhas.length) return;
-  
-  const scrollLeft = slider.scrollLeft;
-  const itemWidth = slides[0].offsetWidth + 8;
-  let indexAtual = Math.round(scrollLeft / itemWidth);
-  indexAtual = Math.min(Math.max(0, indexAtual), bolinhas.length - 1);
-  
-  bolinhas.forEach((bolinha, i) => {
-    if (i === indexAtual) {
-      bolinha.classList.add('ativa');
-    } else {
-      bolinha.classList.remove('ativa');
-    }
-  });
-}
-
-// Scroll suave
-let scrollTimeout;
-slider.addEventListener('scroll', () => {
-  if (scrollTimeout) clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(atualizarIndicadores, 50);
-});
-
-// Iniciar rotação automática
-function iniciarCarrossel() {
-  if (slideInterval) clearInterval(slideInterval);
-  
-  slideInterval = setInterval(() => {
-    if (!slider || !document.querySelector('.slide-item')) return;
-    
-    const slides = document.querySelectorAll('.slide-item');
-    if (!slides.length) return;
-    
-    const itemWidth = slides[0].offsetWidth + 8;
-    const scrollLeft = slider.scrollLeft;
-    const maxScroll = slider.scrollWidth - slider.clientWidth;
-    let nextScroll = scrollLeft + itemWidth;
-    
-    if (nextScroll >= maxScroll - 5) {
-      nextScroll = 0;
-    }
-    
-    slider.scrollTo({ left: nextScroll, behavior: 'smooth' });
-  }, 4000);
-}
-
-// Parar carrossel quando interagir
-function pararCarrossel() {
-  if (slideInterval) {
-    clearInterval(slideInterval);
-    slideInterval = null;
-  }
-}
-
-function reiniciarCarrossel() {
-  pararCarrossel();
-  setTimeout(iniciarCarrossel, 5000);
-}
-
-slider.addEventListener('touchstart', pararCarrossel);
-slider.addEventListener('touchend', reiniciarCarrossel);
-slider.addEventListener('mousedown', pararCarrossel);
-slider.addEventListener('mouseup', reiniciarCarrossel);
 
 // --- FUNÇÃO ABRIR ---
 function abrir() {
   // Tocar música
-  musica.volume = 0.5;
+  musica.volume = 0.3;
   musica.play().then(() => {
     soundBtn.style.display = 'flex';
     soundBtn.innerText = '🔊';
@@ -493,54 +339,31 @@ function abrir() {
     soundBtn.innerText = '🔈';
   });
 
-  // Transição
+  // Transição de telas
   const startScreen = document.getElementById("start");
+  const mainScreen = document.getElementById("main");
+  
   startScreen.style.opacity = "0";
   startScreen.style.pointerEvents = "none";
   
   setTimeout(() => {
     mainScreen.style.opacity = "1";
-    mainScreen.style.pointerEvents = "auto";
-    
-    // Garantir que o card possa scrollar
-    const card = mainScreen.querySelector('.card');
-    if (card) {
-      card.style.overflowY = "auto";
-    }
+    mainScreen.style.pointerEvents = "all";
   }, 100);
 
-  // Idade
+  // Calcular idade
+  let idade = new Date().getFullYear() - 2009;
   const hoje = new Date();
-  let idade = hoje.getFullYear() - 2009;
   const aniversario = new Date(hoje.getFullYear(), 9, 17);
   if (hoje < aniversario) idade--;
-  document.getElementById("idade").innerHTML = idade + " anos de puro caos 🏳️‍🌈";
+  document.getElementById("idade").innerText = idade + " anos de puro caos 🏳️‍🌈";
 
   // Texto digitado
-  const msg = document.getElementById("msg");
-  const texto = "17 anos de pura testosterona\numa boca grande\ne um coração maior ainda\n(feliz aniversário, viado)";
-  msg.innerHTML = "";
-  let i = 0;
-  
-  function typeWriter() {
-    if (i < texto.length) {
-      msg.innerHTML += texto.charAt(i);
-      i++;
-      setTimeout(typeWriter, 40);
-    }
-  }
-  
-  typeWriter();
-  
-  // Carrossel
-  setTimeout(() => {
-    criarIndicadores();
-    atualizarIndicadores();
-    iniciarCarrossel();
-  }, 500);
+  let msg = document.getElementById("msg");
+  digitarTexto("17 anos de pura testosterona\numa boca grande\ne um coração maior ainda\n(feliz aniversário, viado)", msg);
 }
 
-// --- SOM ---
+// --- CONTROLE DE SOM ---
 function toggleSound() {
   if (musica.paused) {
     musica.play();
@@ -551,106 +374,66 @@ function toggleSound() {
   }
 }
 
-// --- PARTÍCULAS OTIMIZADAS ---
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
-let particles = [];
-let animationId;
-
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-
-function initParticles() {
-  resizeCanvas();
+// --- EFEITO MÁQUINA DE ESCREVER ---
+function digitarTexto(texto, elemento) {
+  let i = 0;
+  elemento.innerHTML = "";
   
-  const particleCount = Math.min(40, Math.floor(window.innerWidth / 25));
-  particles = [];
-  
-  for(let i = 0; i < particleCount; i++){
-    particles.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * 2 + 1,
-      dx: (Math.random() - 0.5) * 0.5,
-      dy: (Math.random() - 0.5) * 0.5
-    });
+  function typeChar() {
+    if (i < texto.length) {
+      elemento.innerHTML += texto.charAt(i);
+      i++;
+      setTimeout(typeChar, 30);
+    }
   }
+  
+  typeChar();
 }
 
-function animateParticles() {
-  if (!ctx) return;
-  
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-  
-  particles.forEach(p => {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fill();
-    
-    p.x += p.dx;
-    p.y += p.dy;
-    
-    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-    
-    p.x = Math.min(Math.max(0, p.x), canvas.width);
-    p.y = Math.min(Math.max(0, p.y), canvas.height);
-  });
-  
-  animationId = requestAnimationFrame(animateParticles);
-}
-
-// Redimensionamento
-let resizeTimeout;
-window.addEventListener('resize', () => {
-  if (resizeTimeout) clearTimeout(resizeTimeout);
-  resizeTimeout = setTimeout(() => {
-    resizeCanvas();
-    initParticles();
-    atualizarIndicadores();
-  }, 200);
+// --- SCROLL CORRIGIDO ---
+// Garantir que o scroll funcione em qualquer lugar do card
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('touchstart', (e) => {
+    // Permite scroll normalmente
+    e.stopPropagation();
+  }, { passive: true });
 });
 
-// Inicializar
-initParticles();
-animateParticles();
+// Corrigir scroll no celular
+const mainCard = document.querySelector('#main .card');
+if (mainCard) {
+  mainCard.addEventListener('touchmove', (e) => {
+    // Garantir que o scroll funcione
+    e.stopPropagation();
+  }, { passive: false });
+}
 
-// Ativar som no primeiro toque
+// Forçar som no primeiro toque
 let soundActivated = false;
 
-function firstTouch() {
-  if (!soundActivated && musica) {
-    musica.volume = 0.5;
+function activateSound() {
+  if (!soundActivated) {
+    musica.volume = 0.3;
     musica.play().then(() => {
       soundBtn.style.display = 'flex';
       soundBtn.innerText = '🔊';
       soundActivated = true;
     }).catch(() => {});
+    document.body.removeEventListener('click', activateSound);
+    document.body.removeEventListener('touchstart', activateSound);
   }
 }
 
-document.body.addEventListener('touchstart', firstTouch, { once: true });
-document.body.addEventListener('click', firstTouch, { once: true });
+document.body.addEventListener('click', activateSound);
+document.body.addEventListener('touchstart', activateSound);
 
-// Inicializar indicadores quando a tela principal for mostrada
-const observer = new MutationObserver(() => {
-  if (mainScreen.style.opacity === "1" && mainScreen.style.pointerEvents === "auto") {
-    criarIndicadores();
-    atualizarIndicadores();
-    observer.disconnect();
+// Pequeno atraso para garantir que o card seja rolável
+setTimeout(() => {
+  if (mainCard) {
+    mainCard.style.overflowY = 'auto';
+    mainCard.style.webkitOverflowScrolling = 'touch';
   }
-});
-
-observer.observe(mainScreen, { attributes: true, attributeFilter: ['style'] });
-
-// Limpar ao sair
-window.addEventListener('beforeunload', () => {
-  if (slideInterval) clearInterval(slideInterval);
-  if (animationId) cancelAnimationFrame(animationId);
-});
+}, 100);
 </script>
 
 </body>
