@@ -1,9 +1,8 @@
-
+```html
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Feliz Aniversário 🎂</title>
@@ -21,7 +20,6 @@ body{
   overflow:hidden;
   background: radial-gradient(circle at top,#1a1a2e,#0f0f1a);
   color:white;
-  padding:20%;
 }
 
 /* partículas */
@@ -34,7 +32,7 @@ canvas{
 
 /* telas */
 .screen{
- position:absolute;
+  position:absolute;
   top:0;
   left:0;
   width:100vw;
@@ -46,7 +44,7 @@ canvas{
   transition:1s;
 }
 
-/* card bonito */
+/* card */
 .card{
   width:90%;
   max-width:500px;
@@ -57,20 +55,19 @@ canvas{
   border-radius:25px;
   text-align:center;
   box-shadow:0 0 40px rgba(255,255,255,0.1);
-  margin:20px;
 }
 
 /* título */
 h1{
-  font-size:2.5em;
+  font-size:2.3em;
   background: linear-gradient(45deg,#ff4d6d,#ff9a9e);
   -webkit-background-clip:text;
   color:transparent;
 }
 
-/* nome glow */
+/* nome */
 .nome{
-  font-size:1.8em;
+  font-size:1.6em;
   margin:10px 0;
   animation: brilho 2s infinite alternate;
 }
@@ -85,8 +82,14 @@ h1{
   margin-bottom:10px;
 }
 
-p{
+/* caixinha de texto */
+.box{
+  background: rgba(255,255,255,0.05);
+  border-radius:15px;
+  padding:15px;
   margin-top:15px;
+  font-size:0.95em;
+  line-height:1.4;
 }
 
 /* botão */
@@ -108,39 +111,26 @@ p{
   box-shadow:0 0 25px rgba(255,77,109,1);
 }
 
-/* esconder telas */
-#main{opacity:0;pointer-events:none;}
-#videoScreen{opacity:0;pointer-events:none;}
-
-/* vídeo */
-video{
-  width:100%;
-  max-width:800px;
+/* spotify */
+.spotify{
+  display:inline-block;
+  margin-top:15px;
+  padding:10px 20px;
   border-radius:20px;
-  box-shadow:0 0 40px rgba(0,0,0,0.8);
+  background:#1DB954;
+  color:white;
+  text-decoration:none;
+  font-size:0.9em;
+  transition:0.3s;
 }
 
-/* RESPONSIVO */
-@media (max-width:600px){
-
-  h1{
-    font-size:2em;
-  }
-
-  .nome{
-    font-size:1.5em;
-  }
-
-  p{
-    font-size:1.1em;
-  }
-
-  .btn{
-    font-size:1em;
-    padding:12px 20px;
-  }
-
+.spotify:hover{
+  transform:scale(1.1);
 }
+
+/* esconder */
+#main{opacity:0;pointer-events:none;}
+
 </style>
 </head>
 
@@ -148,7 +138,6 @@ video{
 
 <canvas id="bg"></canvas>
 
-<!-- AUDIO (XUXA SUPREMACY) -->
 <audio id="bgMusic" loop>
   <source src="parabens-da-xuxa_hsKzvzV.mp3" type="audio/mp3">
 </audio>
@@ -157,7 +146,7 @@ video{
 <div id="start" class="screen">
   <div class="card">
     <h1>🎁 Ei…</h1>
-    <p>isso aqui é importante </p>
+    <p>abre isso aqui 👀</p>
     <button class="btn" onclick="abrir()">abrir</button>
   </div>
 </div>
@@ -165,6 +154,7 @@ video{
 <!-- tela principal -->
 <div id="main" class="screen">
   <div class="card">
+
     <h1>🎉 Feliz Aniversário 🎂</h1>
 
     <div class="nome">FELPS GAY</div>
@@ -172,40 +162,41 @@ video{
 
     <p id="msg"></p>
 
-    <button class="btn" onclick="final()">clique aqui para vender sua alma</button>
-  </div>
-</div>
+    <!-- mensagem personalizada -->
+    <div class="box">
+      mano, fiz isso aqui só pra tu 💀<br><br>
+      espero que tu curta esse dia e não faça merda KKKK<br>
+      sério, tu é importante pra caralho 💖
+    </div>
 
-<!-- vídeo -->
-<div id="videoScreen" class="screen">
-  <video id="video" controls>
-    <source src="video.mp4" type="video/mp4">
-  </video>
+    <!-- spotify -->
+    <a class="spotify" href="LINK_AQUI" target="_blank">
+      🎧 ouvir música especial
+    </a>
+
+    <button class="btn" onclick="final()">clique aqui 👀</button>
+
+  </div>
 </div>
 
 <script>
 const musica = document.getElementById("bgMusic");
 
-/* abrir */
 function abrir(){
   trocarTela("start","main");
-
   musica.play().catch(()=>{});
 
   let msg = document.getElementById("msg");
-  digitarTexto("17 anos já...\ntu tá ficando velho\n\nmas sério...\nlembre-se que você é importante 💖", msg);
+  digitarTexto("17 anos já...\ntu tá ficando velho KKKKK\n\nmas sério...\nlembre-se que você é importante 💖", msg);
 }
 
-/* fallback áudio */
 document.body.addEventListener("click", ()=>{
   musica.play().catch(()=>{});
 }, { once:true });
 
-/* idade */
 let idade = new Date().getFullYear() - 2009;
-document.getElementById("idade").innerText = idade + " anos de vida";
+document.getElementById("idade").innerText = idade + " anos de caos";
 
-/* digitar texto */
 function digitarTexto(texto, elemento){
   let i=0;
   elemento.innerHTML="";
@@ -218,7 +209,6 @@ function digitarTexto(texto, elemento){
   },40);
 }
 
-/* trocar telas */
 function trocarTela(sair,entrar){
   document.getElementById(sair).style.opacity=0;
   setTimeout(()=>{
@@ -229,63 +219,13 @@ function trocarTela(sair,entrar){
   },800);
 }
 
-/* final com suspense + fade */
+/* botão final caótico */
 function final(){
   let msg = document.getElementById("msg");
-
-  msg.innerHTML = "processando...";
-
-  let fade = setInterval(()=>{
-    if(musica.volume > 0.1){
-      musica.volume -= 0.1;
-    } else {
-      clearInterval(fade);
-    }
-  },200);
-
-  setTimeout(()=>{
-    trocarTela("main","videoScreen");
-    document.getElementById("video").play();
-  },2500);
+  msg.innerHTML = "pronto, agora vai viver tua vida 👹🎉";
 }
-
-/* partículas */
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles=[];
-for(let i=0;i<80;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    r:Math.random()*2,
-    dx:(Math.random()-0.5),
-    dy:(Math.random()-0.5)
-  });
-}
-
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="white";
-
-  particles.forEach(p=>{
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fill();
-
-    p.x+=p.dx;
-    p.y+=p.dy;
-
-    if(p.x<0||p.x>canvas.width) p.dx*=-1;
-    if(p.y<0||p.y>canvas.height) p.dy*=-1;
-  });
-
-  requestAnimationFrame(animate);
-}
-animate();
 </script>
 
 </body>
 </html>
+```
