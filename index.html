@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
 
 <title>Feliz Aniversário 🎂</title>
 
@@ -19,15 +19,19 @@ body{
   overflow:hidden;
   background: radial-gradient(circle at top,#1a1a2e,#0f0f1a);
   color:white;
+  position: fixed;
+  width: 100%;
 }
 
-/* partículas - versão otimizada */
+/* partículas - fixas no fundo */
 canvas{
   position:fixed;
   top:0;
   left:0;
+  width:100%;
+  height:100%;
   z-index:0;
-  will-change: transform;
+  pointer-events: none; /* IMPORTANTE: não atrapalha o toque */
 }
 
 /* telas */
@@ -35,15 +39,17 @@ canvas{
   position:absolute;
   top:0;
   left:0;
-  width:100vw;
-  height:100vh;
+  width:100%;
+  height:100%;
   display:flex;
   justify-content:center;
   align-items:center;
   flex-direction:column;
-  transition: opacity 0.8s ease;
+  transition: opacity 0.5s ease;
   z-index: 10;
   pointer-events: none;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 #start {
@@ -55,14 +61,16 @@ canvas{
 #main {
   opacity: 0;
   pointer-events: none;
+  overflow-y: auto;
 }
 
-/* card - melhor scroll */
+/* card - agora com scroll PERFEITO */
 .card{
   width:90%;
   max-width:480px;
-  max-height: 85vh;
+  max-height: 90vh;
   overflow-y: auto;
+  overflow-x: hidden;
   background: rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.2);
   backdrop-filter: blur(20px);
@@ -70,10 +78,13 @@ canvas{
   border-radius:30px;
   text-align:center;
   box-shadow:0 0 40px rgba(255,255,255,0.1);
-  pointer-events: all;
+  pointer-events: auto; /* IMPORTANTE: recebe toques */
   -webkit-overflow-scrolling: touch;
+  position: relative;
+  z-index: 15;
 }
 
+/* Scrollbar bonita */
 .card::-webkit-scrollbar {
   width: 4px;
 }
@@ -97,24 +108,33 @@ canvas{
   margin-bottom:15px;
   background: #333;
   border: 2px solid rgba(255,255,255,0.2);
+  pointer-events: none;
 }
 
 .carrossel-container {
   position: relative;
   width: 100%;
   margin: 15px 0;
+  touch-action: pan-y pinch-zoom; /* permite scroll vertical mas não horizontal */
 }
 
 .slider {
   display: flex;
   overflow-x: auto;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   border-radius: 15px;
   gap: 8px;
-  padding-bottom: 5px;
+  padding: 5px 0 10px 0;
   scrollbar-width: thin;
+  touch-action: pan-x; /* Só scroll horizontal no carrossel */
+  cursor: grab;
+}
+
+.slider:active {
+  cursor: grabbing;
 }
 
 .slider::-webkit-scrollbar {
@@ -138,6 +158,7 @@ canvas{
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
   border: 2px solid rgba(255,255,255,0.2);
+  pointer-events: none;
 }
 
 .slide-item img {
@@ -145,15 +166,15 @@ canvas{
   height: 180px; 
   object-fit: cover; 
   display: block;
-  pointer-events: none;
 }
 
-/* Indicadores (bolinhas) */
+/* Indicadores */
 .indicadores {
   display: flex;
   justify-content: center;
   gap: 8px;
   margin-top: 10px;
+  padding: 5px;
 }
 
 .bolinha {
@@ -163,6 +184,7 @@ canvas{
   background: rgba(255,255,255,0.3);
   transition: 0.3s;
   cursor: pointer;
+  pointer-events: auto;
 }
 
 .bolinha.ativa {
@@ -206,6 +228,7 @@ h1{
   min-height: 80px;
   white-space: pre-line;
   font-size: 0.95em;
+  text-align: left;
 }
 
 /* caixa de mensagem */
@@ -217,6 +240,7 @@ h1{
   font-size:0.95em;
   border-left: 3px solid #ff4d6d;
   text-align: left;
+  word-wrap: break-word;
 }
 
 /* spotify */
@@ -232,6 +256,7 @@ h1{
   font-weight: bold;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   transition: transform 0.2s;
+  pointer-events: auto;
 }
 .spotify:active { transform: scale(0.95); }
 
@@ -248,6 +273,7 @@ h1{
   cursor:pointer;
   box-shadow: 0 4px 15px rgba(255,77,109,0.4);
   transition: transform 0.2s;
+  pointer-events: auto;
 }
 .btn:active { transform: scale(0.95); }
 
@@ -270,8 +296,30 @@ h1{
   cursor: pointer;
   z-index: 100;
   transition: 0.2s;
+  pointer-events: auto;
 }
 .sound-toggle:active { background: rgba(255,255,255,0.3); }
+
+/* Ajustes mobile */
+@media (max-width: 600px) {
+  .card {
+    width: 95%;
+    padding: 20px 15px;
+    max-height: 85vh;
+  }
+  
+  .slide-item img {
+    height: 200px;
+  }
+  
+  h1 {
+    font-size: 1.5em;
+  }
+  
+  .nome {
+    font-size: 1.5em;
+  }
+}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -318,11 +366,10 @@ h1{
         <div class="slide-item"><img src="IMG20251112104804~2.jpg" alt="Foto 6" loading="lazy"></div>
       </div>
       
-      <!-- Indicadores (bolinhas) -->
       <div class="indicadores" id="indicadores"></div>
     </div>
 
-    <p id="msg"></p>
+    <div id="msg"></div>
 
     <div class="box">
       <strong>📝 RECADINHO DA PESSOA LINDA MARAVILHOSA PFT QUE TE ENVIOU ISSO:</strong><br><br>
@@ -341,19 +388,23 @@ h1{
 const musica = document.getElementById("bgMusic");
 const soundBtn = document.getElementById("soundBtn");
 const slider = document.getElementById("slider");
+const mainScreen = document.getElementById("main");
 let slideInterval;
 
 // Criar indicadores dinamicamente
 function criarIndicadores() {
   const slides = document.querySelectorAll('.slide-item');
   const indicadoresDiv = document.getElementById('indicadores');
+  if (!indicadoresDiv) return;
+  
   indicadoresDiv.innerHTML = '';
   
   slides.forEach((_, index) => {
     const bolinha = document.createElement('span');
     bolinha.classList.add('bolinha');
     if (index === 0) bolinha.classList.add('ativa');
-    bolinha.addEventListener('click', () => {
+    bolinha.addEventListener('click', (e) => {
+      e.stopPropagation();
       const itemWidth = slides[0].offsetWidth + 8;
       slider.scrollTo({ left: index * itemWidth, behavior: 'smooth' });
     });
@@ -373,26 +424,29 @@ function atualizarIndicadores() {
   indexAtual = Math.min(Math.max(0, indexAtual), bolinhas.length - 1);
   
   bolinhas.forEach((bolinha, i) => {
-    bolinha.classList.toggle('ativa', i === indexAtual);
+    if (i === indexAtual) {
+      bolinha.classList.add('ativa');
+    } else {
+      bolinha.classList.remove('ativa');
+    }
   });
 }
 
-// Scroll suave com throttle
+// Scroll suave
 let scrollTimeout;
 slider.addEventListener('scroll', () => {
   if (scrollTimeout) clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(atualizarIndicadores, 10);
+  scrollTimeout = setTimeout(atualizarIndicadores, 50);
 });
 
-// Iniciar rotação automática das fotos
+// Iniciar rotação automática
 function iniciarCarrossel() {
   if (slideInterval) clearInterval(slideInterval);
   
   slideInterval = setInterval(() => {
-    if (!slider) return;
+    if (!slider || !document.querySelector('.slide-item')) return;
     
     const slides = document.querySelectorAll('.slide-item');
-    const bolinhas = document.querySelectorAll('.bolinha');
     if (!slides.length) return;
     
     const itemWidth = slides[0].offsetWidth + 8;
@@ -400,7 +454,7 @@ function iniciarCarrossel() {
     const maxScroll = slider.scrollWidth - slider.clientWidth;
     let nextScroll = scrollLeft + itemWidth;
     
-    if (nextScroll >= maxScroll) {
+    if (nextScroll >= maxScroll - 5) {
       nextScroll = 0;
     }
     
@@ -408,23 +462,23 @@ function iniciarCarrossel() {
   }, 4000);
 }
 
-// Parar carrossel quando o usuário interagir
-slider.addEventListener('touchstart', () => {
-  if (slideInterval) clearInterval(slideInterval);
-});
+// Parar carrossel quando interagir
+function pararCarrossel() {
+  if (slideInterval) {
+    clearInterval(slideInterval);
+    slideInterval = null;
+  }
+}
 
-slider.addEventListener('mousedown', () => {
-  if (slideInterval) clearInterval(slideInterval);
-});
-
-// Reiniciar carrossel após interação
-slider.addEventListener('touchend', () => {
+function reiniciarCarrossel() {
+  pararCarrossel();
   setTimeout(iniciarCarrossel, 5000);
-});
+}
 
-slider.addEventListener('mouseup', () => {
-  setTimeout(iniciarCarrossel, 5000);
-});
+slider.addEventListener('touchstart', pararCarrossel);
+slider.addEventListener('touchend', reiniciarCarrossel);
+slider.addEventListener('mousedown', pararCarrossel);
+slider.addEventListener('mouseup', reiniciarCarrossel);
 
 // --- FUNÇÃO ABRIR ---
 function abrir() {
@@ -439,31 +493,54 @@ function abrir() {
     soundBtn.innerText = '🔈';
   });
 
-  // Transição de telas
-  document.getElementById("start").style.opacity = "0";
-  document.getElementById("start").style.pointerEvents = "none";
+  // Transição
+  const startScreen = document.getElementById("start");
+  startScreen.style.opacity = "0";
+  startScreen.style.pointerEvents = "none";
   
   setTimeout(() => {
-    document.getElementById("main").style.opacity = "1";
-    document.getElementById("main").style.pointerEvents = "all";
+    mainScreen.style.opacity = "1";
+    mainScreen.style.pointerEvents = "auto";
+    
+    // Garantir que o card possa scrollar
+    const card = mainScreen.querySelector('.card');
+    if (card) {
+      card.style.overflowY = "auto";
+    }
   }, 100);
 
-  // Calcular idade
-  let idade = new Date().getFullYear() - 2009;
+  // Idade
   const hoje = new Date();
-  const aniversario = new Date(hoje.getFullYear(), 9, 17); // 17 de Outubro
+  let idade = hoje.getFullYear() - 2009;
+  const aniversario = new Date(hoje.getFullYear(), 9, 17);
   if (hoje < aniversario) idade--;
-  document.getElementById("idade").innerText = idade + " anos de puro caos 🏳️‍🌈";
+  document.getElementById("idade").innerHTML = idade + " anos de puro caos 🏳️‍🌈";
 
   // Texto digitado
-  let msg = document.getElementById("msg");
-  digitarTexto("17 anos de pura testosterona\numa boca grande\ne um coração maior ainda\n(feliz aniversário, viado)", msg);
+  const msg = document.getElementById("msg");
+  const texto = "17 anos de pura testosterona\numa boca grande\ne um coração maior ainda\n(feliz aniversário, viado)";
+  msg.innerHTML = "";
+  let i = 0;
   
-  // Iniciar carrossel
-  setTimeout(iniciarCarrossel, 1000);
+  function typeWriter() {
+    if (i < texto.length) {
+      msg.innerHTML += texto.charAt(i);
+      i++;
+      setTimeout(typeWriter, 40);
+    }
+  }
+  
+  typeWriter();
+  
+  // Carrossel
+  setTimeout(() => {
+    criarIndicadores();
+    atualizarIndicadores();
+    iniciarCarrossel();
+  }, 500);
 }
 
-// --- CONTROLE DE SOM ---
+// --- SOM ---
 function toggleSound() {
   if (musica.paused) {
     musica.play();
@@ -474,35 +551,21 @@ function toggleSound() {
   }
 }
 
-// --- EFEITO MÁQUINA DE ESCREVER (OTIMIZADO)---
-function digitarTexto(texto, elemento) {
-  let i = 0;
-  elemento.innerHTML = "";
-  
-  function typeChar() {
-    if (i < texto.length) {
-      elemento.innerHTML += texto.charAt(i);
-      i++;
-      setTimeout(typeChar, 40);
-    }
-  }
-  
-  typeChar();
-}
-
-// --- PARTÍCULAS DE FUNDO (OTIMIZADO)---
+// --- PARTÍCULAS OTIMIZADAS ---
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 let particles = [];
 let animationId;
-let resizeTimeout;
 
-function initParticles() {
+function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+}
+
+function initParticles() {
+  resizeCanvas();
   
-  // Menos partículas para melhor performance
-  const particleCount = Math.min(50, Math.floor(window.innerWidth / 20));
+  const particleCount = Math.min(40, Math.floor(window.innerWidth / 25));
   particles = [];
   
   for(let i = 0; i < particleCount; i++){
@@ -510,8 +573,8 @@ function initParticles() {
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       r: Math.random() * 2 + 1,
-      dx: (Math.random() - 0.5) * 0.3,
-      dy: (Math.random() - 0.5) * 0.3
+      dx: (Math.random() - 0.5) * 0.5,
+      dy: (Math.random() - 0.5) * 0.5
     });
   }
 }
@@ -520,7 +583,7 @@ function animateParticles() {
   if (!ctx) return;
   
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+  ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
   
   particles.forEach(p => {
     ctx.beginPath();
@@ -533,7 +596,6 @@ function animateParticles() {
     if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
     if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
     
-    // Manter dentro dos limites
     p.x = Math.min(Math.max(0, p.x), canvas.width);
     p.y = Math.min(Math.max(0, p.y), canvas.height);
   });
@@ -541,47 +603,50 @@ function animateParticles() {
   animationId = requestAnimationFrame(animateParticles);
 }
 
-// Redimensionamento otimizado
+// Redimensionamento
+let resizeTimeout;
 window.addEventListener('resize', () => {
   if (resizeTimeout) clearTimeout(resizeTimeout);
   resizeTimeout = setTimeout(() => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    resizeCanvas();
     initParticles();
     atualizarIndicadores();
-  }, 250);
+  }, 200);
 });
 
 // Inicializar
 initParticles();
 animateParticles();
 
-// Forçar som no primeiro toque (para mobile)
+// Ativar som no primeiro toque
 let soundActivated = false;
 
-function activateSound() {
-  if (!soundActivated) {
+function firstTouch() {
+  if (!soundActivated && musica) {
     musica.volume = 0.5;
     musica.play().then(() => {
       soundBtn.style.display = 'flex';
       soundBtn.innerText = '🔊';
       soundActivated = true;
     }).catch(() => {});
-    document.body.removeEventListener('click', activateSound);
-    document.body.removeEventListener('touchstart', activateSound);
   }
 }
 
-document.body.addEventListener('click', activateSound);
-document.body.addEventListener('touchstart', activateSound);
+document.body.addEventListener('touchstart', firstTouch, { once: true });
+document.body.addEventListener('click', firstTouch, { once: true });
 
-// Inicializar indicadores quando a página carregar
-window.addEventListener('load', () => {
-  criarIndicadores();
-  atualizarIndicadores();
+// Inicializar indicadores quando a tela principal for mostrada
+const observer = new MutationObserver(() => {
+  if (mainScreen.style.opacity === "1" && mainScreen.style.pointerEvents === "auto") {
+    criarIndicadores();
+    atualizarIndicadores();
+    observer.disconnect();
+  }
 });
 
-// Limpar intervalo quando sair da página
+observer.observe(mainScreen, { attributes: true, attributeFilter: ['style'] });
+
+// Limpar ao sair
 window.addEventListener('beforeunload', () => {
   if (slideInterval) clearInterval(slideInterval);
   if (animationId) cancelAnimationFrame(animationId);
