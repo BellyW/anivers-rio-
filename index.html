@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 <title>Feliz Aniversário 🎂</title>
 
@@ -12,7 +12,6 @@
   padding:0;
   box-sizing:border-box;
   font-family:'Poppins',sans-serif;
-  -webkit-tap-highlight-color: transparent;
 }
 
 body{
@@ -20,8 +19,14 @@ body{
   overflow:hidden;
   background: radial-gradient(circle at top,#1a1a2e,#0f0f1a);
   color:white;
-  position: fixed;
-  width: 100%;
+}
+
+/* partículas */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:0;
 }
 
 /* telas */
@@ -29,17 +34,15 @@ body{
   position:absolute;
   top:0;
   left:0;
-  width:100%;
-  height:100%;
+  width:100vw;
+  height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
   flex-direction:column;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.8s ease;
   z-index: 10;
   pointer-events: none;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 #start {
@@ -53,13 +56,12 @@ body{
   pointer-events: none;
 }
 
-/* card - scroll corrigido */
+/* card */
 .card{
   width:90%;
   max-width:480px;
   max-height: 90vh;
   overflow-y: auto;
-  overflow-x: hidden;
   background: rgba(255,255,255,0.08);
   border:1px solid rgba(255,255,255,0.2);
   backdrop-filter: blur(20px);
@@ -68,24 +70,11 @@ body{
   text-align:center;
   box-shadow:0 0 40px rgba(255,255,255,0.1);
   pointer-events: all;
-  -webkit-overflow-scrolling: touch;
-  position: relative;
-  z-index: 15;
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
 }
-
-/* Scroll bonito mas funcional */
 .card::-webkit-scrollbar {
-  width: 4px;
-}
-
-.card::-webkit-scrollbar-track {
-  background: rgba(255,255,255,0.1);
-  border-radius: 10px;
-}
-
-.card::-webkit-scrollbar-thumb {
-  background: #ff4d6d;
-  border-radius: 10px;
+  display: none; 
 }
 
 /* foto destaque */
@@ -97,8 +86,8 @@ body{
   margin-bottom:15px;
   background: #333;
   border: 2px solid rgba(255,255,255,0.2);
-  pointer-events: none;
 }
+
 
 .carrossel-container {
   position: relative;
@@ -115,25 +104,13 @@ body{
   border-radius: 15px;
   gap: 8px;
   padding-bottom: 5px;
-  cursor: grab;
+  
+  
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-
-.slider:active {
-  cursor: grabbing;
-}
-
 .slider::-webkit-scrollbar {
-  height: 4px;
-}
-
-.slider::-webkit-scrollbar-track {
-  background: rgba(255,255,255,0.1);
-  border-radius: 10px;
-}
-
-.slider::-webkit-scrollbar-thumb {
-  background: #ff4d6d;
-  border-radius: 10px;
+  display: none;
 }
 
 .slide-item {
@@ -150,15 +127,35 @@ body{
   height: 180px; 
   object-fit: cover; 
   display: block;
-  pointer-events: none;
 }
+
+/* Indicadores (bolinhas) */
+.indicadores {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.bolinha {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transition: 0.3s;
+}
+.bolinha.ativa {
+  background: #ff4d6d;
+  width: 20px;
+  border-radius: 10px;
+}
+
 
 /* título */
 h1{
   font-size:1.8em;
   background: linear-gradient(45deg,#ff4d6d,#ff9a9e);
   -webkit-background-clip:text;
-  background-clip: text;
   color:transparent;
   margin-bottom: 5px;
 }
@@ -188,7 +185,6 @@ h1{
   min-height: 80px;
   white-space: pre-line;
   font-size: 0.95em;
-  text-align: center;
 }
 
 /* caixa de mensagem */
@@ -199,7 +195,6 @@ h1{
   margin: 15px 0;
   font-size:0.95em;
   border-left: 3px solid #ff4d6d;
-  text-align: left;
 }
 
 /* spotify */
@@ -216,7 +211,7 @@ h1{
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   transition: transform 0.2s;
 }
-.spotify:active { transform: scale(0.95); }
+.spotify:hover { transform: scale(1.05); }
 
 /* botão */
 .btn{
@@ -242,7 +237,7 @@ h1{
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.5);
   backdrop-filter: blur(5px);
   border: 1px solid rgba(255,255,255,0.3);
   color: white;
@@ -254,19 +249,16 @@ h1{
   z-index: 100;
   transition: 0.2s;
 }
-.sound-toggle:active { background: rgba(255,255,255,0.3); }
-
-/* Esconder bolinhas do carrossel */
-.indicadores {
-  display: none;
-}
+.sound-toggle:hover { background: rgba(255,255,255,0.2); }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<audio id="bgMusic" preload="auto">
+<canvas id="bg"></canvas>
+
+<audio id="bgMusic" loop>
   <source src="parabens-da-xuxa_hsKzvzV.mp3" type="audio/mp3">
 </audio>
 
@@ -276,7 +268,7 @@ h1{
 <div id="start" class="screen">
   <div class="card">
     <h1>🎁 Ei, Felps</h1>
-    <p style="margin: 20px 0;">Preparei uma coisinha pra você</p>
+    <p style="margin: 20px 0;">Preparei uma coisinha pra você </p>
     <button class="btn" onclick="abrir()">✨ ABRIR PRESENTE ✨</button>
     <p style="margin-top: 30px; opacity: 0.5; font-size: 0.8em;">(aumenta o som carniça)</p>
   </div>
@@ -287,29 +279,46 @@ h1{
   <div class="card">
 
     <!-- FOTO PRINCIPAL -->
-    <img src="felps (1).jpg" class="top-photo" alt="Foto destaque" loading="lazy">
+    <img src="felps (1).jpg" class="top-photo" alt="Foto destaque">
 
     <h1>🎉 FELIZ ANIVERSÁRIO 🎂</h1>
 
     <div class="nome">FELPS GAY</div>
     <div class="idade" id="idade"></div>
 
+  
     <div class="carrossel-container">
       <div class="slider" id="slider">
-        <div class="slide-item"><img src="IMG_20240524_164312.jpg" alt="Foto 1" loading="lazy"></div>
-        <div class="slide-item"><img src="IMG_20240523_072654.jpg" alt="Foto 2" loading="lazy"></div>
-        <div class="slide-item"><img src="IMG-20240826-WA0005.jpg" alt="Foto 3" loading="lazy"></div>
-        <div class="slide-item"><img src="IMG_20240429_080108.jpg" alt="Foto 4" loading="lazy"></div>
-        <div class="slide-item"><img src="IMG20251003101635.jpg" alt="Foto 5" loading="lazy"></div>
-        <div class="slide-item"><img src="IMG20251112104804~2.jpg" alt="Foto 6" loading="lazy"></div>
+     
+        <div class="slide-item"><img src="IMG_20240524_164312.jpg" alt="Foto 1"></div>
+
+        <div class="slide-item"><img src="IMG_20240523_072654.jpg" alt="Foto 2"></div>
+  
+        <div class="slide-item"><img src="IMG-20240826-WA0005.jpg" alt="Foto 3"></div>
+        
+        <div class="slide-item"><img src="IMG_20240429_080108.jpg" alt="Foto 4"></div>
+
+        <div class="slide-item"><img src="IMG20251003101635.jpg" alt="Foto 5"></div>
+
+        <div class="slide-item"><img src="IMG20251112104804~2.jpg" alt="Foto 6"></div>
+      </div>
+      
+      <!-- Indicadores (bolinhas) -->
+      <div class="indicadores" id="indicadores">
+        <span class="bolinha ativa"></span>
+        <span class="bolinha"></span>
+        <span class="bolinha"></span>
+        <span class="bolinha"></span>
+        <span class="bolinha"></span>
+        <span class="bolinha"></span>
       </div>
     </div>
+  
 
     <p id="msg"></p>
 
     <div class="box">
-      <strong>📝 RECADINHO DA PESSOA LINDA MARAVILHOSA PFT QUE TE ENVIOU ISSO:</strong><br><br>
-      Eai desgraça, fiz isso aqui porque eu não queria passar o mico de mandar mensagem por mensagem 🙄(e porque eu invejo aquele menino do LEI). Passando aqui pra te desejar um feliz aniversário e agradecer por tudo que você faz por mim, saiba que você é uma pessoa incrível e eu espero que a sua mãe continue me aguentando naquele muquifo😃. Um ano mais perto de ser preso, continue se esforçando como você ta fazendo agora, fiquei feliz de ver seu empenho nas provas, se continuar assim cê fica o mais inteligente do grupo. Eu não vou escrever mais nada de baitolistico aqui não, mas eu separei uma música, uma música que eu escutava a muito tempo atrás e voltei a ouvir ano passado e percebi que ela me lembrava muito você (só ignorar umas partes dela óbvio). É bem antes e depois de Chiquititas mas eu amo ela affs😭 escutava na pandemia. Aperta aí no meu botão (lá ele)
+       RECADINHO DA PESSOA LINDA MARAVILHOSA PFT QUE TE ENVIOU ISSO:  <br>Eai desgraça, fiz isso aqui porque eu não queria passar o mico de mandar mensagem por mensagem 🙄(e porque eu invejo aquele menino do LEI). Passando aqui pra te desejar um feliz aniversário e agradecer por tudo que você faz por mim, saiba que você é uma pessoa incrível e eu espero que a sua mãe continue me aguentando naquele muquifo😃. Um ano mais perto de ser preso, continue se esforçando como você ta fazendo agora, fiquei feliz de ver seu empenho nas provas, se continuar assim cê fica o mais inteligente do grupo. Eu não vou escrever mais nada de baitolistico aqui não, mas eu separei uma música, uma música que eu escutava a muito tempo atrás e voltei a ouvir ano passado e percebi que ela me lembrava muito você (só ignorar umas partes dela óbvio). É bem antes e depois de Chiquititas mas eu amo ela affs😭 escutava na pandemia. Aperta aí no meu botão (lá ele)
     </div>
 
     <a class="spotify" href="https://open.spotify.com/intl-pt/track/65gLJGey4u4KFFqoC5fzFJ?si=f0eeb428fe554ded" target="_blank">
@@ -324,43 +333,29 @@ h1{
 const musica = document.getElementById("bgMusic");
 const soundBtn = document.getElementById("soundBtn");
 const slider = document.getElementById("slider");
-let slideInterval;
+const bolinhas = document.querySelectorAll(".bolinha");
 
 // --- FUNÇÃO ABRIR ---
-function abrir() {
-  // Tocar música
-  musica.volume = 0.3;
+function abrir(){
   musica.play().then(() => {
     soundBtn.style.display = 'flex';
     soundBtn.innerText = '🔊';
   }).catch(e => {
-    console.log("Auto-play bloqueado:", e);
     soundBtn.style.display = 'flex';
     soundBtn.innerText = '🔈';
   });
 
-  // Transição de telas
-  const startScreen = document.getElementById("start");
-  const mainScreen = document.getElementById("main");
+  document.getElementById("start").style.opacity = "0";
+  document.getElementById("start").style.pointerEvents = "none";
   
-  startScreen.style.opacity = "0";
-  startScreen.style.pointerEvents = "none";
-  
-  setTimeout(() => {
-    mainScreen.style.opacity = "1";
-    mainScreen.style.pointerEvents = "all";
-  }, 100);
+  document.getElementById("main").style.opacity = "1";
+  document.getElementById("main").style.pointerEvents = "all";
 
-  // Calcular idade
   let idade = new Date().getFullYear() - 2009;
-  const hoje = new Date();
-  const aniversario = new Date(hoje.getFullYear(), 9, 17);
-  if (hoje < aniversario) idade--;
   document.getElementById("idade").innerText = idade + " anos de puro caos 🏳️‍🌈";
 
-  // Texto digitado
   let msg = document.getElementById("msg");
-  digitarTexto("17 anos de pura testosterona\numa boca grande\ne um coração maior ainda\n(feliz aniversário, viado)", msg);
+  digitarTexto("17 anos de pura testosterona\n uma boca grande\ne um coração maior ainda\n(feliz aniversário, viado)", msg);
 }
 
 // --- CONTROLE DE SOM ---
@@ -375,66 +370,95 @@ function toggleSound() {
 }
 
 // --- EFEITO MÁQUINA DE ESCREVER ---
-function digitarTexto(texto, elemento) {
+function digitarTexto(texto, elemento){
   let i = 0;
   elemento.innerHTML = "";
-  
-  function typeChar() {
-    if (i < texto.length) {
-      elemento.innerHTML += texto.charAt(i);
-      i++;
-      setTimeout(typeChar, 30);
-    }
-  }
-  
-  typeChar();
+  let intervalo = setInterval(() => {
+    elemento.innerHTML += texto.charAt(i);
+    i++;
+    if(i >= texto.length) clearInterval(intervalo);
+  }, 40);
 }
 
-// --- SCROLL CORRIGIDO ---
-// Garantir que o scroll funcione em qualquer lugar do card
-document.querySelectorAll('.card').forEach(card => {
-  card.addEventListener('touchstart', (e) => {
-    // Permite scroll normalmente
-    e.stopPropagation();
-  }, { passive: true });
+// --- ATUALIZAR BOLINHAS CONFORME O SCROLL ---
+function atualizarIndicadores() {
+  const scrollLeft = slider.scrollLeft;
+  const itemWidth = slider.querySelector('.slide-item').offsetWidth + 8; // 8px é o gap
+  const indexAtual = Math.round(scrollLeft / itemWidth);
+  
+  bolinhas.forEach((bolinha, i) => {
+    if (i === indexAtual) {
+      bolinha.classList.add('ativa');
+    } else {
+      bolinha.classList.remove('ativa');
+    }
+  });
+}
+
+// Evento de scroll para atualizar bolinhas
+slider.addEventListener('scroll', atualizarIndicadores);
+
+// Garantir que a largura seja recalculada se a tela girar
+window.addEventListener('resize', () => {
+  atualizarIndicadores();
 });
 
-// Corrigir scroll no celular
-const mainCard = document.querySelector('#main .card');
-if (mainCard) {
-  mainCard.addEventListener('touchmove', (e) => {
-    // Garantir que o scroll funcione
-    e.stopPropagation();
-  }, { passive: false });
+// --- PARTÍCULAS DE FUNDO ---
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+for(let i = 0; i < 70; i++){
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 3 + 1,
+    dx: (Math.random() - 0.5) * 0.5,
+    dy: (Math.random() - 0.5) * 0.5
+  });
 }
 
-// Forçar som no primeiro toque
-let soundActivated = false;
+function animate(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+  
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fill();
+    
+    p.x += p.dx;
+    p.y += p.dy;
+    
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+  });
+  
+  requestAnimationFrame(animate);
+}
+animate();
 
-function activateSound() {
-  if (!soundActivated) {
-    musica.volume = 0.3;
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+// Forçar som no primeiro toque
+window.onload = () => {
+  document.body.addEventListener('click', function initSound() {
     musica.play().then(() => {
       soundBtn.style.display = 'flex';
       soundBtn.innerText = '🔊';
-      soundActivated = true;
-    }).catch(() => {});
-    document.body.removeEventListener('click', activateSound);
-    document.body.removeEventListener('touchstart', activateSound);
-  }
-}
-
-document.body.addEventListener('click', activateSound);
-document.body.addEventListener('touchstart', activateSound);
-
-// Pequeno atraso para garantir que o card seja rolável
-setTimeout(() => {
-  if (mainCard) {
-    mainCard.style.overflowY = 'auto';
-    mainCard.style.webkitOverflowScrolling = 'touch';
-  }
-}, 100);
+    }).catch(()=>{});
+    document.body.removeEventListener('click', initSound);
+  }, { once: true });
+  
+  // Inicializa indicadores
+  atualizarIndicadores();
+};
 </script>
 
 </body>
-</html>
+</html> PROBLEMINHAA, ESSE SITE TA TRAVANDO, HOSPEDEI NO GITHUB
