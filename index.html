@@ -1,9 +1,8 @@
-```html id="site-final-ultimate">
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 <title>Feliz Aniversário 🎂</title>
 
@@ -27,7 +26,7 @@ canvas{
   position:fixed;
   top:0;
   left:0;
-  z-index:-1;
+  z-index:0;
 }
 
 /* telas */
@@ -41,7 +40,20 @@ canvas{
   justify-content:center;
   align-items:center;
   flex-direction:column;
-  transition:1s;
+  transition: opacity 0.8s ease;
+  z-index: 10;
+  pointer-events: none; /* Padrão para não bloquear cliques na tela de trás */
+}
+
+#start {
+  opacity: 1;
+  pointer-events: all;
+  z-index: 20;
+}
+
+#main {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* card */
@@ -55,6 +67,7 @@ canvas{
   border-radius:25px;
   text-align:center;
   box-shadow:0 0 40px rgba(255,255,255,0.1);
+  pointer-events: all; /* Permite interação dentro do card */
 }
 
 /* foto destaque */
@@ -64,6 +77,7 @@ canvas{
   border-radius:15px;
   object-fit:cover;
   margin-bottom:10px;
+  background: #333; /* fallback */
 }
 
 /* slideshow */
@@ -73,7 +87,7 @@ canvas{
   height:150px;
   overflow:hidden;
   border-radius:15px;
-  margin-top:10px;
+  margin: 15px 0;
 }
 
 .slider img{
@@ -82,7 +96,7 @@ canvas{
   object-fit:cover;
   position:absolute;
   opacity:0;
-  transition:0.5s;
+  transition: opacity 0.5s ease;
 }
 
 .slider img.active{
@@ -91,67 +105,107 @@ canvas{
 
 /* título */
 h1{
-  font-size:2em;
+  font-size:1.8em;
   background: linear-gradient(45deg,#ff4d6d,#ff9a9e);
   -webkit-background-clip:text;
   color:transparent;
+  margin-bottom: 5px;
 }
 
 /* nome */
 .nome{
-  font-size:1.4em;
+  font-size:1.8em;
+  font-weight: bold;
   margin:8px 0;
   animation: brilho 2s infinite alternate;
 }
 
 @keyframes brilho{
   from{ text-shadow:0 0 10px #ff4d6d; }
-  to{ text-shadow:0 0 25px #ff4d6d; }
+  to{ text-shadow:0 0 25px #ff4d6d, 0 0 5px #fff; }
 }
 
 .idade{
-  opacity:0.7;
+  opacity:0.8;
+  margin-bottom: 5px;
 }
 
 /* texto */
 #msg{
-  margin-top:10px;
+  margin: 15px 0 10px;
+  line-height: 1.5;
+  min-height: 80px;
+  white-space: pre-line;
 }
 
 /* caixa */
 .box{
   background: rgba(255,255,255,0.05);
   border-radius:15px;
-  padding:12px;
-  margin-top:10px;
-  font-size:0.9em;
+  padding:15px;
+  margin: 15px 0;
+  font-size:0.95em;
+  border-left: 3px solid #ff4d6d;
 }
 
 /* spotify */
 .spotify{
   display:inline-block;
   margin-top:10px;
-  padding:8px 18px;
-  border-radius:20px;
+  padding:10px 20px;
+  border-radius:30px;
   background:#1DB954;
   color:white;
   text-decoration:none;
-  font-size:0.85em;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+.spotify:hover {
+  transform: scale(1.05);
 }
 
 /* botão */
 .btn{
   margin-top:20px;
-  padding:12px 25px;
+  padding:14px 30px;
   border:none;
-  border-radius:15px;
+  border-radius:40px;
   background: linear-gradient(45deg,#ff4d6d,#ff758c);
   color:white;
+  font-weight: bold;
+  font-size: 1.1em;
   cursor:pointer;
+  box-shadow: 0 4px 15px rgba(255,77,109,0.4);
+  transition: transform 0.2s;
 }
+.btn:active { transform: scale(0.95); }
 
-#main{opacity:0;pointer-events:none;}
+/* Botão de som flutuante */
+.sound-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  transition: 0.2s;
+}
+.sound-toggle:hover {
+  background: rgba(255,255,255,0.2);
+}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -159,15 +213,20 @@ h1{
 <canvas id="bg"></canvas>
 
 <audio id="bgMusic" loop>
+  <!-- Verifique se o arquivo está na mesma pasta com esse nome exato -->
   <source src="parabens-da-xuxa_hsKzvzV.mp3" type="audio/mp3">
 </audio>
+
+<!-- Botão de controle de som (aparece depois de abrir) -->
+<div id="soundBtn" class="sound-toggle" style="display: none;" onclick="toggleSound()">🔊</div>
 
 <!-- tela inicial -->
 <div id="start" class="screen">
   <div class="card">
-    <h1>🎁 Ei…</h1>
-    <p>abre isso aqui 👀</p>
-    <button class="btn" onclick="abrir()">abrir</button>
+    <h1>🎁 Ei, Felps…</h1>
+    <p style="margin: 20px 0;">Preparei uma coisinha pra você 👀</p>
+    <button class="btn" onclick="abrir()">✨ ABRIR PRESENTE ✨</button>
+    <p style="margin-top: 30px; opacity: 0.5; font-size: 0.8em;">(aumenta o som, tá?)</p>
   </div>
 </div>
 
@@ -176,146 +235,185 @@ h1{
   <div class="card">
 
     <!-- FOTO PRINCIPAL -->
-    <img src="foto1.jpg" class="top-photo">
+    <img src="foto1.jpg" class="top-photo" alt="Foto destaque">
 
-    <h1>🎉 Feliz Aniversário 🎂</h1>
+    <h1>🎉 FELIZ ANIVERSÁRIO 🎂</h1>
 
     <div class="nome">FELPS GAY</div>
     <div class="idade" id="idade"></div>
 
     <!-- SLIDESHOW -->
     <div class="slider" id="slider">
-      <img src="IMG_20240524_164312.jpg" class="active">
-      <img src="IMG_20240523_072654.jpg">
-      <img src="Screenshot_20240525-215329.jpg">
+      <img src="IMG_20240524_164312.jpg" class="active" alt="Momento 1">
+      <img src="IMG_20240523_072654.jpg" alt="Momento 2">
+      <img src="Screenshot_20240525-215329.jpg" alt="Momento 3">
     </div>
 
     <p id="msg"></p>
 
     <div class="box">
-      escreve aqui tua mensagem 💖
+      💖 RECADINHO DA PESSOA QUE TE ENVIOU ISSO: 💖 <br>
+      "Tu é incrível, mesmo sendo um caos. Obrigado por existir e me aturar. Te amo! Nunca mude (só para de ser lerdo kkkk)."
     </div>
 
-    <a class="spotify" href="LINK_AQUI" target="_blank">
-      🎧 música especial
+    <!-- LINK ATUALIZADO PARA UMA MÚSICA VIRAL DO MOMENTO (Ex: "Sua Cara" ou "Pabllo Vittar") -->
+    <a class="spotify" href="https://open.spotify.com/track/1oZkmT6UDBhE53nDcgjMmJ?si=abc123" target="_blank">
+      🎧 CLICA AQUI PRA TOCAR O HINO 🏳️‍🌈
     </a>
 
+    <p style="margin-top: 20px; font-size: 0.7em; opacity: 0.6;">Desliza as fotos pro lado →</p>
   </div>
 </div>
 
 <script>
+// --- ELEMENTOS ---
 const musica = document.getElementById("bgMusic");
+const soundBtn = document.getElementById("soundBtn");
+let isMusicPlaying = false;
 
+// --- FUNÇÃO ABRIR (CORRIGIDA) ---
 function abrir(){
-  trocarTela("start","main");
-  musica.play().catch(()=>{});
+  // Toca a música assim que o usuário interage (resolve bloqueio de autoplay)
+  musica.play().then(() => {
+    isMusicPlaying = true;
+    soundBtn.style.display = 'flex';
+    soundBtn.innerText = '🔊';
+  }).catch(e => {
+    console.log("Autoplay bloqueado, clique no botão de som.");
+    soundBtn.style.display = 'flex';
+    soundBtn.innerText = '🔈'; // Mostra mudo
+  });
 
+  // Troca a tela
+  document.getElementById("start").style.opacity = "0";
+  document.getElementById("start").style.pointerEvents = "none";
+  
+  document.getElementById("main").style.opacity = "1";
+  document.getElementById("main").style.pointerEvents = "all";
+
+  // Calcula e exibe a idade
+  let idade = new Date().getFullYear() - 2009;
+  document.getElementById("idade").innerText = idade + " anos de puro caos 🏳️‍🌈";
+
+  // Inicia a digitação
   let msg = document.getElementById("msg");
-  digitarTexto("17 anos já...\ntu tá ficando velho KKKKK\n\nmas sério...\ntu é importante 💖", msg);
+  digitarTexto("17 anos já...\ntu tá ficando velho KKKKK\n\nmas sério...\ntu é muito importante pra mim 💖\n(feliz aniversário, viado)", msg);
 }
 
-document.body.addEventListener("click", ()=>{
-  musica.play().catch(()=>{});
-}, { once:true });
+// --- CONTROLE DE SOM ---
+function toggleSound() {
+  if (musica.paused) {
+    musica.play();
+    soundBtn.innerText = '🔊';
+  } else {
+    musica.pause();
+    soundBtn.innerText = '🔈';
+  }
+}
 
-let idade = new Date().getFullYear() - 2009;
-document.getElementById("idade").innerText = idade + " anos de caos";
-
-/* digitar */
+// --- EFEITO MÁQUINA DE ESCREVER ---
 function digitarTexto(texto, elemento){
-  let i=0;
-  elemento.innerHTML="";
-  let intervalo=setInterval(()=>{
+  let i = 0;
+  elemento.innerHTML = "";
+  let intervalo = setInterval(() => {
     elemento.innerHTML += texto.charAt(i);
     i++;
-    if(i>=texto.length){
+    if(i >= texto.length){
       clearInterval(intervalo);
     }
-  },40);
+  }, 40);
 }
 
-/* trocar tela */
-function trocarTela(sair,entrar){
-  document.getElementById(sair).style.opacity=0;
-  setTimeout(()=>{
-    document.getElementById(sair).style.display="none";
-    let el=document.getElementById(entrar);
-    el.style.opacity=1;
-    el.style.pointerEvents="all";
-  },800);
-}
+// --- SLIDESHOW (COM TOQUE E AUTOMÁTICO) ---
+let index = 0;
+let imgs = document.querySelectorAll(".slider img");
 
-/* slideshow automático */
-let index=0;
-let imgs=document.querySelectorAll(".slider img");
+setInterval(() => {
+  if (imgs.length > 0) {
+    imgs[index].classList.remove("active");
+    index = (index + 1) % imgs.length;
+    imgs[index].classList.add("active");
+  }
+}, 3000);
 
-setInterval(()=>{
-  imgs[index].classList.remove("active");
-  index=(index+1)%imgs.length;
-  imgs[index].classList.add("active");
-},2500);
+// Swipe para mobile
+let startX = 0;
+const sliderEl = document.getElementById("slider");
 
-/* swipe */
-let startX=0;
+sliderEl.addEventListener("touchstart", (e) => {
+  startX = e.touches[0].clientX;
+}, {passive: true});
 
-document.getElementById("slider").addEventListener("touchstart",(e)=>{
-  startX=e.touches[0].clientX;
-});
-
-document.getElementById("slider").addEventListener("touchend",(e)=>{
-  let endX=e.changedTouches[0].clientX;
-
-  if(startX > endX + 50){
-    mudarSlide(1);
-  }else if(startX < endX - 50){
-    mudarSlide(-1);
+sliderEl.addEventListener("touchend", (e) => {
+  let endX = e.changedTouches[0].clientX;
+  if (startX > endX + 50) {
+    mudarSlide(1); // Direita -> Esquerda (Próximo)
+  } else if (startX < endX - 50) {
+    mudarSlide(-1); // Esquerda -> Direita (Anterior)
   }
 });
 
-function mudarSlide(dir){
+function mudarSlide(dir) {
   imgs[index].classList.remove("active");
-  index=(index+dir+imgs.length)%imgs.length;
+  index = (index + dir + imgs.length) % imgs.length;
   imgs[index].classList.add("active");
 }
 
-/* partículas */
+// --- PARTÍCULAS DE FUNDO (CORRIGIDO Z-INDEX) ---
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let particles=[];
-for(let i=0;i<60;i++){
+let particles = [];
+for(let i = 0; i < 70; i++){
   particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    r:Math.random()*2,
-    dx:(Math.random()-0.5),
-    dy:(Math.random()-0.5)
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 3 + 1,
+    dx: (Math.random() - 0.5) * 0.5,
+    dy: (Math.random() - 0.5) * 0.5
   });
 }
 
 function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="white";
-
-  particles.forEach(p=>{
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+  
+  particles.forEach(p => {
     ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
     ctx.fill();
-
-    p.x+=p.dx;
-    p.y+=p.dy;
-
-    if(p.x<0||p.x>canvas.width) p.dx*=-1;
-    if(p.y<0||p.y>canvas.height) p.dy*=-1;
+    
+    p.x += p.dx;
+    p.y += p.dy;
+    
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
   });
-
+  
   requestAnimationFrame(animate);
 }
 animate();
+
+// Ajustar canvas ao redimensionar a janela
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+// Forçar a exibição do botão de som caso o autoplay falhe
+window.onload = () => {
+  // Tenta tocar música no primeiro toque na tela (backup)
+  document.body.addEventListener('click', function initSound() {
+    musica.play().then(() => {
+      soundBtn.style.display = 'flex';
+      soundBtn.innerText = '🔊';
+    }).catch(()=>{});
+    document.body.removeEventListener('click', initSound);
+  }, { once: true });
+};
 </script>
 
 </body>
 </html>
-```
