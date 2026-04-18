@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 <title>Feliz Aniversário 🎂</title>
 
@@ -93,7 +93,6 @@ canvas{
   position: relative;
   width: 100%;
   margin: 15px 0;
-  touch-action: pan-y pinch-zoom;
 }
 
 .slider {
@@ -103,38 +102,31 @@ canvas{
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   border-radius: 15px;
-  gap: 12px;
-  padding-bottom: 10px;
-  cursor: grab;
-  touch-action: pan-y pinch-zoom;
+  gap: 8px;
+  padding-bottom: 5px;
+  
+  
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-
-.slider:active {
-  cursor: grabbing;
-}
-
 .slider::-webkit-scrollbar {
   display: none;
 }
 
 .slide-item {
-  flex: 0 0 80%;
+  flex: 0 0 85%; 
   scroll-snap-align: center;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
   border: 2px solid rgba(255,255,255,0.2);
-  pointer-events: none;
 }
 
 .slide-item img {
   width: 100%;
-  height: 180px;
-  object-fit: cover;
+  height: 180px; 
+  object-fit: cover; 
   display: block;
-  pointer-events: none;
 }
 
 /* Indicadores (bolinhas) */
@@ -151,7 +143,6 @@ canvas{
   border-radius: 50%;
   background: rgba(255,255,255,0.3);
   transition: 0.3s;
-  cursor: pointer;
 }
 .bolinha.ativa {
   background: #ff4d6d;
@@ -204,7 +195,6 @@ h1{
   margin: 15px 0;
   font-size:0.95em;
   border-left: 3px solid #ff4d6d;
-  text-align: left;
 }
 
 /* spotify */
@@ -221,7 +211,7 @@ h1{
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   transition: transform 0.2s;
 }
-.spotify:active { transform: scale(0.95); }
+.spotify:hover { transform: scale(1.05); }
 
 /* botão */
 .btn{
@@ -259,7 +249,7 @@ h1{
   z-index: 100;
   transition: 0.2s;
 }
-.sound-toggle:active { background: rgba(255,255,255,0.2); }
+.sound-toggle:hover { background: rgba(255,255,255,0.2); }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -315,12 +305,12 @@ h1{
       
       <!-- Indicadores (bolinhas) -->
       <div class="indicadores" id="indicadores">
-        <span class="bolinha ativa" data-index="0"></span>
-        <span class="bolinha" data-index="1"></span>
-        <span class="bolinha" data-index="2"></span>
-        <span class="bolinha" data-index="3"></span>
-        <span class="bolinha" data-index="4"></span>
-        <span class="bolinha" data-index="5"></span>
+        <span class="bolinha ativa"></span>
+        <span class="bolinha"></span>
+        <span class="bolinha"></span>
+        <span class="bolinha"></span>
+        <span class="bolinha"></span>
+        <span class="bolinha"></span>
       </div>
     </div>
   
@@ -343,7 +333,7 @@ h1{
 const musica = document.getElementById("bgMusic");
 const soundBtn = document.getElementById("soundBtn");
 const slider = document.getElementById("slider");
-let bolinhas = document.querySelectorAll(".bolinha");
+const bolinhas = document.querySelectorAll(".bolinha");
 
 // --- FUNÇÃO ABRIR ---
 function abrir(){
@@ -390,29 +380,14 @@ function digitarTexto(texto, elemento){
   }, 40);
 }
 
-// --- ATUALIZAR BOLINHAS CONFORME O SCROLL (CORRIGIDO PARA TOUCH) ---
+// --- ATUALIZAR BOLINHAS CONFORME O SCROLL ---
 function atualizarIndicadores() {
-  const slides = document.querySelectorAll('.slide-item');
   const scrollLeft = slider.scrollLeft;
-  const clientWidth = slider.clientWidth;
-  
-  let melhorIndex = 0;
-  let menorDiferenca = Infinity;
-  
-  slides.forEach((slide, idx) => {
-    const slideLeft = slide.offsetLeft;
-    const slideCenter = slideLeft + (slide.offsetWidth / 2);
-    const viewportCenter = scrollLeft + (clientWidth / 2);
-    const diferenca = Math.abs(slideCenter - viewportCenter);
-    
-    if (diferenca < menorDiferenca) {
-      menorDiferenca = diferenca;
-      melhorIndex = idx;
-    }
-  });
+  const itemWidth = slider.querySelector('.slide-item').offsetWidth + 8; // 8px é o gap
+  const indexAtual = Math.round(scrollLeft / itemWidth);
   
   bolinhas.forEach((bolinha, i) => {
-    if (i === melhorIndex) {
+    if (i === indexAtual) {
       bolinha.classList.add('ativa');
     } else {
       bolinha.classList.remove('ativa');
@@ -420,48 +395,12 @@ function atualizarIndicadores() {
   });
 }
 
-// --- CLICAR NAS BOLINHAS ROLA PARA A FOTO ---
-function adicionarEventosBolinhas() {
-  bolinhas = document.querySelectorAll(".bolinha");
-  const slides = document.querySelectorAll('.slide-item');
-  
-  bolinhas.forEach((bolinha, index) => {
-    bolinha.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (slides[index]) {
-        slides[index].scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'center'
-        });
-        
-        // Atualiza as bolinhas depois de um tempo
-        setTimeout(() => {
-          atualizarIndicadores();
-        }, 300);
-      }
-    });
-  });
-}
-
 // Evento de scroll para atualizar bolinhas
-slider.addEventListener('scroll', () => {
-  atualizarIndicadores();
-});
-
-// Evento de touch para garantir atualização
-slider.addEventListener('touchend', () => {
-  setTimeout(atualizarIndicadores, 50);
-});
-
-// Evento de mouse
-slider.addEventListener('mouseup', () => {
-  setTimeout(atualizarIndicadores, 50);
-});
+slider.addEventListener('scroll', atualizarIndicadores);
 
 // Garantir que a largura seja recalculada se a tela girar
 window.addEventListener('resize', () => {
-  setTimeout(atualizarIndicadores, 100);
+  atualizarIndicadores();
 });
 
 // --- PARTÍCULAS DE FUNDO ---
@@ -516,18 +455,9 @@ window.onload = () => {
     document.body.removeEventListener('click', initSound);
   }, { once: true });
   
-  // Inicializa indicadores e eventos
-  setTimeout(() => {
-    atualizarIndicadores();
-    adicionarEventosBolinhas();
-  }, 100);
+  // Inicializa indicadores
+  atualizarIndicadores();
 };
-
-// Reaplicar eventos se o conteúdo mudar
-const observer = new MutationObserver(() => {
-  adicionarEventosBolinhas();
-});
-observer.observe(document.getElementById('main'), { childList: true, subtree: true });
 </script>
 
 </body>
